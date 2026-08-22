@@ -11,7 +11,12 @@ import thomas from '../assets/thomas.png';
 
 const title = 'Meubelmontage en klusjesman in Bierbeek | Thomas';
 const description = 'Thomas helpt particulieren en bedrijven in Bierbeek en Leuven met meubelmontage, kleine herstellingen en praktische klussen. Duidelijk afgesproken en zorgvuldig afgewerkt.';
-const promises = [['01','Voor iedereen','Particulier & bedrijf'],['02','Duidelijke afspraken','Geen verrassingen'],['03','Zorgvuldig afgewerkt','Met oog voor detail'],['04','Snel beschikbaar','Vlot geholpen']];
+const promises = [
+  { icon: 'users-three', label: 'Voor iedereen', sub: 'Particulier & bedrijf' },
+  { icon: 'handshake', label: 'Duidelijke afspraken', sub: 'Geen verrassingen' },
+  { icon: 'seal-check', label: 'Zorgvuldig afgewerkt', sub: 'Met oog voor detail' },
+  { icon: 'lightning', label: 'Snel beschikbaar', sub: 'Vlot geholpen' },
+];
 const services = [
   { n:'01', title:'Meubelmontage', text:'Zorgvuldige montage van meubels, bureaus en presentatiestanden voor particulieren en bedrijven. Snel, correct en zonder gedoe.', image:serviceMeubelmontage, alt:'Thomas monteert een houten meubel met een boormachine' },
   { n:'02', title:'Kleine herstellingen', text:'Van lampen en scharnieren tot plinten en sloten: ik pak kleine herstellingen betrouwbaar en met oog voor detail aan.', image:serviceHerstellingen, alt:'Thomas werkt aan een hanglamp' },
@@ -45,12 +50,12 @@ const structuredData = {
     </div></section>
 
     <section class="trust" aria-label="Onze beloftes"><div class="shell trust-grid">
-      {promises.map(([n,label,sub]) => <div class="trust-item"><strong>{n}</strong><span><b>{label}</b><small>{sub}</small></span></div>)}
+      {promises.map(({icon,label,sub}) => <div class="trust-item"><span class="trust-icon" aria-hidden="true"><i class:list={['ph-duotone', `ph-${icon}`]}></i></span><span class="trust-copy"><b>{label}</b><small>{sub}</small></span></div>)}
     </div></section>
 
     <section class="section services" id="diensten"><div class="shell services-grid">
       <div class="section-intro"><h2>Vakwerk,<br />zonder gedoe.</h2><p>Praktische hulp voor kleine en grotere klussen, thuis of op het werk. Zorgvuldig uitgevoerd en duidelijk afgesproken.</p><a class="button" href="#contact"><span>Neem contact op</span></a></div>
-      <div class="service-list"><p class="service-tagline">Persoonlijk · praktisch · transparant</p>
+      <div class="service-list"><p class="service-tagline"></p>
         {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><button class="service-trigger" type="button" aria-label={service.title} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden="true"><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} /></span></span></span></button></article>)}
       </div>
     </div></section>
@@ -65,7 +70,7 @@ const structuredData = {
       <div><h2>Een rustige doener met oog voor detail.</h2><p>Ik ben Thomas, een praktische doener die graag met zijn handen werkt. Ik haal er voldoening uit om problemen op te lossen en iets netjes afgewerkt achter te laten. Mensen omschrijven mij als rustig, betrouwbaar en nauwkeurig. Persoonlijk contact vind ik belangrijk: eenvoudig overleggen, eerlijk afspreken en goed werk afleveren.</p></div>
     </div></section>
 
-    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>Actief in Bierbeek<br />en omgeving.</h2><p>Thomas helpt particulieren en bedrijven in Bierbeek, Leuven en omliggende gemeenten. Twijfel je of jouw gemeente erbij hoort? Neem gerust contact op.</p></div><ol><li><span>01</span>Bierbeek</li><li><span>02</span>Leuven</li><li><span>03</span>Omliggende gemeenten</li></ol></div></section>
+    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>Actief in Bierbeek<br />en omgeving.</h2><p>Thomas helpt particulieren en bedrijven in Bierbeek, Leuven en omliggende gemeenten. Twijfel je of jouw gemeente erbij hoort? Neem gerust contact op.</p></div><ol><li><i class="area-icon ph-duotone ph-house-line" aria-hidden="true"></i><span class="area-label">Bierbeek</span></li><li><i class="area-icon ph-duotone ph-buildings" aria-hidden="true"></i><span class="area-label">Leuven</span></li><li><i class="area-icon ph-duotone ph-map-trifold" aria-hidden="true"></i><span class="area-label">Omliggende gemeenten</span></li></ol></div></section>
 
     <section class="contact" id="contact"><div class="shell contact-grid">
       <div><h2>Heb je een vraag?</h2><p>Een klus of vraag in gedachten? Neem gerust contact op. Ik bespreek graag de mogelijkheden en bezorg je snel een duidelijke, vrijblijvende prijsinschatting.</p>
