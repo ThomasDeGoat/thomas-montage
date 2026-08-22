@@ -1,17 +1,91 @@
 ---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import heroArtwork from '../assets/hero.svg?url';
+import serviceMeubelmontage from '../assets/service-meubelmontage.png';
+import serviceHerstellingen from '../assets/service-herstellingen.png';
+import serviceDoeHetZelf from '../assets/service-doe-het-zelf.png';
+import servicePrijzen from '../assets/service-prijzen.png';
+import thomas from '../assets/thomas.png';
 
+const title = 'Meubelmontage en klusjesman in Bierbeek | Thomas';
+const description = 'Thomas helpt particulieren en bedrijven in Bierbeek en Leuven met meubelmontage, kleine herstellingen en praktische klussen. Duidelijk afgesproken en zorgvuldig afgewerkt.';
+const promises = [['01','Voor iedereen','Particulier & bedrijf'],['02','Duidelijke afspraken','Geen verrassingen'],['03','Zorgvuldig afgewerkt','Met oog voor detail'],['04','Snel beschikbaar','Vlot geholpen']];
+const services = [
+  { n:'01', title:'Meubelmontage', text:'Zorgvuldige montage van meubels, bureaus en presentatiestanden voor particulieren en bedrijven. Snel, correct en zonder gedoe.', image:serviceMeubelmontage, alt:'Thomas monteert een houten meubel met een boormachine' },
+  { n:'02', title:'Kleine herstellingen', text:'Van lampen en scharnieren tot plinten en sloten: ik pak kleine herstellingen betrouwbaar en met oog voor detail aan.', image:serviceHerstellingen, alt:'Thomas werkt aan een hanglamp' },
+  { n:'03', title:'Doe-het-zelfondersteuning', text:'Een extra hand nodig? Ik help met eenvoudige klussen, zoals gordijnrails ophangen, rekjes monteren en andere kleine projecten.', image:serviceDoeHetZelf, alt:'Thomas bevestigt een gordijnrail met een boormachine' },
+  { n:'04', title:'Eerlijke prijzen', text:'Particulieren kiezen voor een tegoedregeling of tevredenheidsprijs. Bedrijven krijgen duidelijke vaste tarieven en een correcte factuur.', image:servicePrijzen, alt:'Overleg over een prijsinschatting voor een klus' },
+];
+const reviews = [
+  ['SP','Sofie Peeters','Particuliere klant','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
+  ['JV','Jonas Vermeulen','Particuliere klant','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
+  ['PD','Pieter De Smet','Zaakvoerder','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
+];
+const structuredData = {
+  '@context':'https://schema.org','@type':'HomeAndConstructionBusiness',name:'Thomas Montage & Klussen',
+  url:Astro.site?.href ?? 'https://thomas-montage.be',image:new URL('/assets/og-image.png', Astro.site ?? Astro.url).href,description,
+  address:{'@type':'PostalAddress',streetAddress:'Merbeekstraat 1',postalCode:'3360',addressLocality:'Bierbeek',addressCountry:'BE'},
+  areaServed:['Bierbeek','Leuven','Vlaams-Brabant'],
+};
 ---
+<BaseLayout {title} {description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <div class="site-header-wrap"><div class="shell"><Header /></div></div>
+  <main id="inhoud">
+    <section class="hero" id="top"><div class="shell">
+      <div class="hero-grid"><div class="hero-copy">
+        <h1>De klus gedaan.<br />Zonder gedoe.</h1>
+        <p>Praktische hulp voor particulieren en bedrijven. Zorgvuldig uitgevoerd, duidelijk afgesproken en correct afgewerkt.</p>
+        <div class="actions"><a class="button" href="#contact"><span>Neem contact op</span></a><a class="button button--outline" href="#diensten"><span>Bekijk diensten</span></a></div>
+      </div><div class="hero-art" aria-label="Voorbeelden van meubels die Thomas monteert">
+        <img class="hero-artwork" src={heroArtwork} alt="Een stoel, nachtkastje en bijzettafel" />
+      </div></div>
+    </div></section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+    <section class="trust" aria-label="Onze beloftes"><div class="shell trust-grid">
+      {promises.map(([n,label,sub]) => <div class="trust-item"><strong>{n}</strong><span><b>{label}</b><small>{sub}</small></span></div>)}
+    </div></section>
+
+    <section class="section services" id="diensten"><div class="shell services-grid">
+      <div class="section-intro"><h2>Vakwerk,<br />zonder gedoe.</h2><p>Praktische hulp voor kleine en grotere klussen, thuis of op het werk. Zorgvuldig uitgevoerd en duidelijk afgesproken.</p><a class="button" href="#contact"><span>Neem contact op</span></a></div>
+      <div class="service-list"><p class="service-tagline">Persoonlijk · praktisch · transparant</p>
+        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><button class="service-trigger" type="button" aria-label={service.title} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden="true"><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} /></span></span></span></button></article>)}
+      </div>
+    </div></section>
+
+    <section class="section reviews" aria-labelledby="reviews-title"><div class="shell">
+      <h2 id="reviews-title">Wat zeggen de klanten?</h2><p class="section-lead">Van meubelmontage tot kleine herstellingen: dit vertellen klanten over Thomas.</p>
+      <div class="review-grid">{reviews.map(([initials,name,role,quote]) => <article class="review-card"><div class="review-person"><span class="avatar">{initials}</span><span><strong>{name}</strong><small>{role}</small></span></div><blockquote>“{quote}”</blockquote><div class="review-bottom"><img src="/assets/stars.svg" width="108" height="20" alt="5 van 5 sterren" /><time datetime="2026-08-22">22/08/2026</time></div></article>)}</div>
+    </div></section>
+
+    <section class="section about" id="over-thomas"><div class="shell about-grid">
+      <div class="portrait"><Image src={thomas} alt="Thomas, meubelmonteur en klusjesman" widths={[480,700]} sizes="(max-width: 760px) 78vw, 420px" /></div>
+      <div><h2>Een rustige doener met oog voor detail.</h2><p>Ik ben Thomas, een praktische doener die graag met zijn handen werkt. Ik haal er voldoening uit om problemen op te lossen en iets netjes afgewerkt achter te laten. Mensen omschrijven mij als rustig, betrouwbaar en nauwkeurig. Persoonlijk contact vind ik belangrijk: eenvoudig overleggen, eerlijk afspreken en goed werk afleveren.</p></div>
+    </div></section>
+
+    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>Actief in Bierbeek<br />en omgeving.</h2><p>Thomas helpt particulieren en bedrijven in Bierbeek, Leuven en omliggende gemeenten. Twijfel je of jouw gemeente erbij hoort? Neem gerust contact op.</p></div><ol><li><span>01</span>Bierbeek</li><li><span>02</span>Leuven</li><li><span>03</span>Omliggende gemeenten</li></ol></div></section>
+
+    <section class="contact" id="contact"><div class="shell contact-grid">
+      <div><h2>Heb je een vraag?</h2><p>Een klus of vraag in gedachten? Neem gerust contact op. Ik bespreek graag de mogelijkheden en bezorg je snel een duidelijke, vrijblijvende prijsinschatting.</p>
+        <form id="contact-form"><label>Naam<input required name="name" autocomplete="name" /></label><label>E-mail<input required type="email" name="email" autocomplete="email" /></label><label>Bericht<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>Verstuur bericht</span></button></form>
+      </div><div class="direct-contact"><p>Liever rechtstreeks contact? Je bereikt Thomas via onderstaande gegevens.</p><address><a href="tel:+324XXXXXXXX"><img src="/assets/phone.svg" alt="" />+32 4XX XX XX XX</a><a href="mailto:info@thomas.be"><img src="/assets/email.svg" alt="" />info@thomas.be</a><span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">Ook bereikbaar via WhatsApp en Facebook</p><div class="socials"><a href="https://wa.me/324XXXXXXXX" aria-label="Neem contact op via WhatsApp"><img src="/assets/whatsapp.svg" alt="" /></a><a href="#" aria-label="Bekijk Thomas op Facebook"><img src="/assets/facebook.svg" alt="" /></a></div></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label="Voettekst"><a href="#diensten">Diensten</a><a href="#over-thomas">Over Thomas</a><a href="#diensten">Werkwijze</a><a href="#contact">Contact</a></nav><p>Voor particulieren en bedrijven<br />Duidelijke afspraken<br />Zorgvuldig afgewerkt</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span>Persoonlijk · praktisch · transparant</span></div></div></footer>
+  <script>
+    const serviceButtons = [...document.querySelectorAll<HTMLButtonElement>('.service-trigger')];
+    serviceButtons.forEach((button) => button.addEventListener('click', () => {
+      if (button.getAttribute('aria-expanded') === 'true') return;
+
+      serviceButtons.forEach((otherButton) => {
+        const isActive = otherButton === button;
+        const item = otherButton.closest<HTMLElement>('[data-service]');
+        otherButton.setAttribute('aria-expanded', String(isActive));
+        item?.classList.toggle('is-open', isActive);
+      });
+    }));
+    document.querySelector<HTMLFormElement>('#contact-form')?.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(event.currentTarget); const subject = encodeURIComponent(`Websiteaanvraag van ${data.get('name')}`); const body = encodeURIComponent(`${data.get('message')}\n\nNaam: ${data.get('name')}\nE-mail: ${data.get('email')}`); window.location.href = `mailto:info@thomas.be?subject=${subject}&body=${body}`; });
+  </script>
+</BaseLayout>

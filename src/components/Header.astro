@@ -1,0 +1,17 @@
+<header class="site-header" aria-label="Hoofdnavigatie">
+  <a class="brand" href="#top" aria-label="Thomas Montage & Klussen, startpagina"><img src="/assets/logo.svg" width="190" height="55" alt="Thomas Montage & Klussen" /></a>
+  <button class="menu-button" type="button" aria-expanded="false" aria-controls="navigation">Menu</button>
+  <nav id="navigation" class="main-nav" aria-label="Primaire navigatie">
+    <a href="#diensten"><span>Diensten</span></a><a href="#over-thomas"><span>Over Thomas</span></a><a href="#contact"><span>Contact</span></a><a class="button button--small" href="#contact"><span>Neem contact op</span></a>
+  </nav>
+</header>
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header-wrap');
+  const syncHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  syncHeader();
+  window.addEventListener('scroll', syncHeader, { passive: true });
+  const button = document.querySelector<HTMLButtonElement>('.menu-button');
+  const nav = document.querySelector<HTMLElement>('.main-nav');
+  button?.addEventListener('click', () => { const open = button.getAttribute('aria-expanded') === 'true'; button.setAttribute('aria-expanded', String(!open)); nav?.classList.toggle('is-open', !open); });
+  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => { button?.setAttribute('aria-expanded', 'false'); nav.classList.remove('is-open'); }));
+</script>
