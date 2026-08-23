@@ -44,21 +44,41 @@
     38% { opacity: 0.085; transform: scaleX(1.03); }
     68% { opacity: 0.115; transform: scaleX(0.99); }
   }
+  .furniture-entry {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: opacity, transform, filter;
+  }
+  .furniture-entry--cabinet { animation: furniture-enter 900ms cubic-bezier(.16, 1, .3, 1) 120ms both; }
+  .furniture-entry--chair { animation: furniture-enter 900ms cubic-bezier(.16, 1, .3, 1) 300ms both; }
+  .furniture-entry--table { animation: furniture-enter 900ms cubic-bezier(.16, 1, .3, 1) 480ms both; }
+  .shadow-entry { will-change: opacity; }
+  .shadow-entry--cabinet { animation: shadow-enter 620ms ease-out 190ms both; }
+  .shadow-entry--chair { animation: shadow-enter 620ms ease-out 370ms both; }
+  .shadow-entry--table { animation: shadow-enter 620ms ease-out 550ms both; }
+  @keyframes furniture-enter {
+    from { opacity: 0; transform: translateY(28px) scale(.93); filter: blur(5px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+  @keyframes shadow-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .furniture, .floor-shadow { animation: none; }
+    .furniture, .floor-shadow, .furniture-entry, .shadow-entry { animation: none; }
   }
 </style>
 <rect x="321.307" y="408.211" width="221.039" height="331.559" rx="15.3766" fill="#DADADA"/>
 <rect x="66.6309" y="269.821" width="221.039" height="351.741" rx="15.3766" fill="#A67B50"/>
 <rect x="321.307" y="110.288" width="221.039" height="270.052" rx="15.3766" fill="#516848"/>
 <g id="hero-floor-shadows" aria-hidden="true">
-  <g transform="rotate(-8 181 616)"><ellipse class="floor-shadow floor-shadow--chair" cx="181" cy="616" rx="70" ry="10" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g>
-  <g transform="rotate(-7 421 389)"><ellipse class="floor-shadow floor-shadow--cabinet" cx="421" cy="389" rx="67" ry="9" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g>
-  <g transform="rotate(-5 431 739)"><ellipse class="floor-shadow floor-shadow--table" cx="431" cy="739" rx="82" ry="11" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g>
+  <g class="shadow-entry shadow-entry--chair"><g transform="rotate(-8 181 616)"><ellipse class="floor-shadow floor-shadow--chair" cx="181" cy="616" rx="70" ry="10" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g></g>
+  <g class="shadow-entry shadow-entry--cabinet"><g transform="rotate(-7 421 389)"><ellipse class="floor-shadow floor-shadow--cabinet" cx="421" cy="389" rx="67" ry="9" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g></g>
+  <g class="shadow-entry shadow-entry--table"><g transform="rotate(-5 431 739)"><ellipse class="floor-shadow floor-shadow--table" cx="431" cy="739" rx="82" ry="11" fill="#333F2E" filter="url(#floor-shadow-blur)"/></g></g>
 </g>
-<g class="furniture furniture--chair"><rect width="278.122" height="417.182" transform="matrix(-0.981353 -0.192216 -0.192216 0.981353 353.125 269.185)" fill="url(#pattern0_65_897)"/></g>
-<g class="furniture furniture--cabinet"><rect x="263.076" y="42.9121" width="282.501" height="423.751" transform="rotate(-8.73703 263.076 42.9121)" fill="url(#pattern1_65_897)"/></g>
-<g class="furniture furniture--table"><rect x="219.931" y="425.375" width="378.101" height="403.329" transform="rotate(-6.91108 219.931 425.375)" fill="url(#pattern2_65_897)"/></g>
+<g class="furniture-entry furniture-entry--chair"><g class="furniture furniture--chair"><rect width="278.122" height="417.182" transform="matrix(-0.981353 -0.192216 -0.192216 0.981353 353.125 269.185)" fill="url(#pattern0_65_897)"/></g></g>
+<g class="furniture-entry furniture-entry--cabinet"><g class="furniture furniture--cabinet"><rect x="263.076" y="42.9121" width="282.501" height="423.751" transform="rotate(-8.73703 263.076 42.9121)" fill="url(#pattern1_65_897)"/></g></g>
+<g class="furniture-entry furniture-entry--table"><g class="furniture furniture--table"><rect x="219.931" y="425.375" width="378.101" height="403.329" transform="rotate(-6.91108 219.931 425.375)" fill="url(#pattern2_65_897)"/></g></g>
 <defs>
 <filter id="floor-shadow-blur" x="-30%" y="-250%" width="160%" height="600%" color-interpolation-filters="sRGB">
   <feGaussianBlur stdDeviation="7"/>
