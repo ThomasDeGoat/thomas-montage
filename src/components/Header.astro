@@ -1,31 +1,124 @@
-<header class="site-header" aria-label="Hoofdnavigatie">
-  <a class="brand" href="#top" aria-label="Thomas Montage & Klussen, startpagina"><img src="/assets/logo.svg" width="190" height="55" alt="Thomas Montage & Klussen" /></a>
-  <button class="menu-button" type="button" aria-expanded="false" aria-controls="navigation" aria-label="Menu openen"><span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="menu-label">Menu</span></button>
-  <nav id="navigation" class="main-nav" aria-label="Primaire navigatie">
-    <a href="#diensten"><span>Diensten</span></a><a href="#over-thomas"><span>Over Thomas</span></a><a href="#contact"><span>Contact</span></a><a class="button button--small" href="#contact"><span>Bespreek je klus</span></a>
+---
+import { content } from '../data/content.js';
+
+interface Props { locale?: 'nl' | 'fr'; }
+const { locale = 'nl' } = Astro.props;
+const copy = content[locale].header;
+---
+<header class="site-header" aria-label={copy.label}>
+  <a class="brand" href="#top" aria-label={copy.homeLabel}>
+    <img src="/assets/logo.svg" width="190" height="55" alt="Thomas Montage & Klussen" />
+  </a>
+
+  <button
+    class="menu-button"
+    type="button"
+    aria-expanded="false"
+    aria-controls="navigation"
+    aria-label={copy.openLabel}
+    data-open-aria={copy.openLabel}
+    data-close-aria={copy.closeLabel}
+    data-open-text={copy.menu}
+    data-close-text={copy.close}
+  >
+    <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    <span class="menu-label">{copy.menu}</span>
+  </button>
+
+  <nav id="navigation" class="main-nav" aria-label={copy.navLabel}>
+    <a href="#diensten"><span>{copy.services}</span></a>
+    <a href="#over-thomas"><span>{copy.about}</span></a>
+    <a href="#contact"><span>{copy.contact}</span></a>
+
+    <div class="language-picker" data-language-picker>
+      <button
+        class="language-trigger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="language-options"
+        aria-haspopup="true"
+        aria-label={copy.languageLabel}
+      >
+        <span>{copy.currentCode}</span>
+        <span class="language-current-name">{copy.currentName}</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 6 4.5 4 4.5-4" /></svg>
+      </button>
+      <div id="language-options" class="language-options" role="menu">
+        <a href="/" hreflang="nl-BE" lang="nl" role="menuitem" aria-current={locale === 'nl' ? 'page' : undefined}>
+          <strong>NL</strong><span>Nederlands</span>
+        </a>
+        <a href="/fr/" hreflang="fr-BE" lang="fr" role="menuitem" aria-current={locale === 'fr' ? 'page' : undefined}>
+          <strong>FR</strong><span>Français</span>
+        </a>
+      </div>
+    </div>
+
+    <a class="button button--small" href="#contact"><span>{copy.cta}</span></a>
   </nav>
 </header>
+
 <script>
   const header = document.querySelector<HTMLElement>('.site-header-wrap');
   const menuButton = document.querySelector<HTMLButtonElement>('.menu-button');
   const menuLabel = menuButton?.querySelector<HTMLElement>('.menu-label');
   const nav = document.querySelector<HTMLElement>('.main-nav');
+  const languagePicker = document.querySelector<HTMLElement>('[data-language-picker]');
+  const languageTrigger = languagePicker?.querySelector<HTMLButtonElement>('.language-trigger');
+  const languageOptions = languagePicker?.querySelector<HTMLElement>('.language-options');
 
   const syncHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+
+  const setLanguageMenu = (open: boolean) => {
+    languageTrigger?.setAttribute('aria-expanded', String(open));
+    languagePicker?.classList.toggle('is-open', open);
+  };
+
   const setMenu = (open: boolean) => {
+    const openAria = menuButton?.dataset.openAria ?? 'Menu openen';
+    const closeAria = menuButton?.dataset.closeAria ?? 'Menu sluiten';
+    const openText = menuButton?.dataset.openText ?? 'Menu';
+    const closeText = menuButton?.dataset.closeText ?? 'Sluiten';
     menuButton?.setAttribute('aria-expanded', String(open));
-    menuButton?.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
-    if (menuLabel) menuLabel.textContent = open ? 'Sluiten' : 'Menu';
+    menuButton?.setAttribute('aria-label', open ? closeAria : openAria);
+    if (menuLabel) menuLabel.textContent = open ? closeText : openText;
     nav?.classList.toggle('is-open', open);
     document.documentElement.classList.toggle('menu-open', open);
+    if (!open) setLanguageMenu(false);
   };
 
   syncHeader();
   window.addEventListener('scroll', syncHeader, { passive: true });
   menuButton?.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
-  nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+
+  languageTrigger?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setLanguageMenu(languageTrigger.getAttribute('aria-expanded') !== 'true');
+  });
+
+  languageOptions?.addEventListener('keydown', (event) => {
+    const options = [...languageOptions.querySelectorAll<HTMLAnchorElement>('a')];
+    const current = options.indexOf(document.activeElement as HTMLAnchorElement);
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' ? 1 : -1;
+      options[(current + direction + options.length) % options.length]?.focus();
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!languagePicker?.contains(event.target as Node)) setLanguageMenu(false);
+  });
+
+  nav?.querySelectorAll<HTMLAnchorElement>('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
+    if (event.key !== 'Escape') return;
+    if (languageTrigger?.getAttribute('aria-expanded') === 'true') {
+      setLanguageMenu(false);
+      languageTrigger.focus();
+      return;
+    }
+    if (menuButton?.getAttribute('aria-expanded') === 'true') {
       setMenu(false);
       menuButton.focus();
     }

@@ -1,0 +1,331 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import PhosphorIcon from '../components/PhosphorIcon.astro';
+import heroChair from '../assets/hero-chair-shadowless.webp?url';
+import heroNightstand from '../assets/hero-nightstand-shadowless.webp?url';
+import heroTable from '../assets/hero-table-shadowless.webp?url';
+import ogImage from '../assets/OG.png?url';
+import serviceMeubelmontage from '../assets/service-meubelmontage.webp';
+import serviceHerstellingen from '../assets/service-herstellingen.webp';
+import serviceDoeHetZelf from '../assets/service-doe-het-zelf.webp';
+import servicePrijzen from '../assets/service-prijzen.webp';
+import thomas from '../assets/thomas.webp';
+import { reviews } from '../data/reviews.js';
+import { content } from '../data/content.js';
+
+interface Props { locale?: 'nl' | 'fr'; }
+const { locale = 'nl' } = Astro.props;
+const copy = content[locale];
+const { title, description } = copy.meta;
+const promises = copy.promises;
+const serviceImages = [serviceMeubelmontage, serviceHerstellingen, serviceDoeHetZelf, servicePrijzen];
+const services = copy.services.map((service, index) => ({
+  ...service,
+  n: String(index + 1).padStart(2, '0'),
+  image: serviceImages[index],
+}));
+const localizedReviews = reviews.map((review) => ({
+  ...review,
+  ...(locale === 'fr' ? review.translations?.fr : {}),
+}));
+const hasReviewOverflow = localizedReviews.length > 3;
+const siteUrl = new URL('/', Astro.site ?? Astro.url).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const businessId = new URL('/#bedrijf', siteUrl).href;
+const websiteId = new URL('/#website', siteUrl).href;
+const pageId = new URL(Astro.url.pathname + '#webpagina', siteUrl).href;
+const phone = import.meta.env.PUBLIC_PHONE_E164;
+const phoneDisplay = import.meta.env.PUBLIC_PHONE_DISPLAY || '+32 4XX XX XX XX';
+const email = import.meta.env.PUBLIC_EMAIL;
+const emailDisplay = email || 'info@thomas.be';
+const whatsappUrl = import.meta.env.PUBLIC_WHATSAPP_URL;
+const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL;
+const socialProfiles = [facebookUrl].filter(Boolean);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'HomeAndConstructionBusiness',
+      '@id': businessId,
+      name: 'Thomas Montage & Klussen',
+      url: siteUrl,
+      logo: { '@type': 'ImageObject', url: new URL('/favicon/android-chrome-512x512.png', siteUrl).href },
+      image: new URL(ogImage, siteUrl).href,
+      description,
+      founder: { '@type': 'Person', name: 'Thomas', knowsLanguage: ['nl', 'fr'] },
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Merbeekstraat 1',
+        postalCode: '3360',
+        addressLocality: 'Bierbeek',
+        addressRegion: 'Vlaams-Brabant',
+        addressCountry: 'BE',
+      },
+      areaServed: [
+        { '@type': 'City', name: 'Tienen' },
+        { '@type': 'City', name: 'Leuven' },
+        { '@type': 'AdministrativeArea', name: 'Vlaams-Brabant' },
+        { '@type': 'AdministrativeArea', name: 'Wallonia' },
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: locale === 'fr' ? 'Montage de meubles et petits travaux' : 'Montage- en klusdiensten',
+        itemListElement: services.slice(0, 3).map((service) => ({
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: service.title, description: service.text, provider: { '@id': businessId } },
+        })),
+      },
+      ...(phone ? { telephone: phone } : {}),
+      ...(email ? { email } : {}),
+      ...(socialProfiles.length ? { sameAs: socialProfiles } : {}),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: siteUrl,
+      name: 'Thomas Montage & Klussen',
+      alternateName: 'Thomas',
+      inLanguage: ['nl-BE', 'fr-BE'],
+      publisher: { '@id': businessId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': pageId,
+      url: pageUrl,
+      name: title,
+      description,
+      inLanguage: copy.localeCode,
+      isPartOf: { '@id': websiteId },
+      about: { '@id': businessId },
+      primaryImageOfPage: { '@type': 'ImageObject', url: new URL(ogImage, siteUrl).href },
+    },
+  ],
+};
+---
+<BaseLayout {title} {description} {locale} imageAlt={copy.meta.imageAlt} skipLink={copy.skipLink}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <div class="site-header-wrap"><div class="shell"><Header {locale} /></div></div>
+  <main id="inhoud">
+    <section class="hero" id="top"><div class="shell">
+      <div class="hero-grid"><div class="hero-copy">
+        <p class="eyebrow">{copy.hero.eyebrow}</p>
+        <h1><span>{copy.hero.titleTop}</span><span>{copy.hero.titleBottom}</span></h1>
+        <p>{copy.hero.body}</p>
+        <div class="actions"><a class="button" href="#contact"><span>{copy.hero.primary}</span></a><a class="button button--outline" href="#diensten"><span>{copy.hero.secondary}</span></a></div>
+      </div><div class="hero-art">
+        <svg class="hero-artwork" viewBox="0 0 625 801" role="img" aria-labelledby="hero-art-title">
+          <title id="hero-art-title">{copy.hero.artAlt}</title>
+          <rect x="321.307" y="408.211" width="221.039" height="331.559" rx="15.3766" fill="#DADADA" />
+          <rect x="66.6309" y="269.821" width="221.039" height="351.741" rx="15.3766" fill="#A67B50" />
+          <rect x="321.307" y="110.288" width="221.039" height="270.052" rx="15.3766" fill="#516848" />
+          <g class="hero-shadow-entry hero-shadow-entry--chair"><g transform="rotate(-8 181 616)"><ellipse class="hero-floor-shadow hero-floor-shadow--chair" cx="181" cy="616" rx="70" ry="10" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-shadow-entry hero-shadow-entry--cabinet"><g transform="rotate(-7 421 389)"><ellipse class="hero-floor-shadow hero-floor-shadow--cabinet" cx="421" cy="389" rx="67" ry="9" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-shadow-entry hero-shadow-entry--table"><g transform="rotate(-5 431 739)"><ellipse class="hero-floor-shadow hero-floor-shadow--table" cx="431" cy="739" rx="82" ry="11" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--chair"><g class="hero-furniture hero-furniture--chair"><image href={heroChair} width="278.122" height="417.182" transform="matrix(-0.981353 -0.192216 -0.192216 0.981353 353.125 269.185)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--cabinet"><g class="hero-furniture hero-furniture--cabinet"><image href={heroNightstand} x="263.076" y="42.9121" width="282.501" height="423.751" transform="rotate(-8.73703 263.076 42.9121)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--table"><g class="hero-furniture hero-furniture--table"><image href={heroTable} x="219.931" y="425.375" width="378.101" height="403.329" transform="rotate(-6.91108 219.931 425.375)" /></g></g>
+          <defs><filter id="hero-shadow-blur" x="-30%" y="-250%" width="160%" height="600%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7" /></filter></defs>
+        </svg>
+      </div></div>
+    </div></section>
+
+    <section class="trust" aria-label={copy.trustLabel}><div class="shell trust-grid">
+      {promises.map(({icon,label,sub}) => <div class="trust-item"><span class="trust-icon" aria-hidden="true"><PhosphorIcon name={icon} /></span><span class="trust-copy"><b>{label}</b><small>{sub}</small></span></div>)}
+    </div></section>
+
+    <section class="section services" id="diensten"><div class="shell services-grid">
+      <div class="section-intro"><h2>{copy.servicesIntro.top}<br />{copy.servicesIntro.bottom}</h2><p>{copy.servicesIntro.body}</p><a class="button" href="#contact"><span>{copy.servicesIntro.cta}</span></a></div>
+      <div class="service-list"><p class="service-tagline"></p>
+        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><h3 class="sr-only" id={"service-title-" + index}>{service.title}</h3><button class="service-trigger" type="button" aria-labelledby={"service-title-" + index} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden={index !== 0}><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} loading="lazy" decoding="async" /></span></span></span></button></article>)}
+      </div>
+    </div></section>
+
+    <section class="section reviews" aria-labelledby="reviews-title"><div class="shell">
+      <h2 id="reviews-title">{copy.reviews.heading}</h2><p class="section-lead">{copy.reviews.lead}</p>
+      <div class:list={['review-slider', { 'has-overflow': hasReviewOverflow }]} data-review-slider data-position-label={copy.reviews.positionLabel}>
+        <div class="review-viewport" data-review-viewport tabindex={hasReviewOverflow ? '0' : undefined} aria-label={copy.reviews.regionLabel}>
+          <div class="review-grid" style={`grid-template-columns: repeat(${localizedReviews.length}, var(--review-column)) max(0px, calc(var(--review-gutter) - var(--review-gap)));`}>{localizedReviews.map(({initials,name,role,quote,date,dateLabel,rating,tone}) => <article class="review-card"><div class="review-person"><span class:list={['avatar', `avatar--${tone}`]}>{initials}</span><span><strong>{name}</strong><small>{role}</small></span></div><blockquote>“{quote}”</blockquote><div class="review-bottom"><img src="/assets/stars.svg" width="108" height="20" alt={`${rating} ${copy.reviews.ratingLabel}`} /><time datetime={date}>{dateLabel}</time></div></article>)}<span class="review-end-spacer" aria-hidden="true"></span></div>
+        </div>
+        {hasReviewOverflow && <><span class="review-fade review-fade--left" aria-hidden="true"></span><span class="review-fade review-fade--right" aria-hidden="true"></span><div class="review-dots" data-review-dots aria-label={copy.reviews.dotsLabel}></div></>}
+      </div>
+    </div></section>
+
+    <section class="section about" id="over-thomas"><div class="shell about-grid">
+      <div class="portrait"><Image src={thomas} alt={copy.about.imageAlt} widths={[480,700]} sizes="(max-width: 760px) 78vw, 420px" loading="lazy" decoding="async" /></div>
+      <div><h2>{copy.about.heading}</h2><p>{copy.about.body}</p></div>
+    </div></section>
+
+    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>{copy.area.top}<br />{copy.area.bottom}</h2><p>{copy.area.body}</p></div><ol><li><PhosphorIcon name="house-line" class="area-icon" /><span class="area-label">{copy.area.locations[0]}</span></li><li><PhosphorIcon name="buildings" class="area-icon" /><span class="area-label">{copy.area.locations[1]}</span></li><li><PhosphorIcon name="map-trifold" class="area-icon" /><span class="area-label">{copy.area.locations[2]}</span></li></ol></div></section>
+
+    <section class="contact" id="contact"><div class="shell contact-grid">
+      <div><h2>{copy.contact.heading}</h2><p>{copy.contact.body}</p>
+        <form id="contact-form" name="contact" method="POST" action={locale === 'fr' ? '/fr/' : '/'} data-netlify="true" netlify-honeypot="bot-field" data-sending-message={copy.contact.sending} data-success-message={copy.contact.success} data-error-message={copy.contact.error}>
+          <input type="hidden" name="form-name" value="contact" /><input type="hidden" name="language" value={copy.localeCode} />
+          <p class="form-honeypot" aria-hidden="true"><label>{copy.contact.honeypot}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+          <label>{copy.contact.name}<input required name="name" autocomplete="name" /></label><label>{copy.contact.email}<input required type="email" name="email" autocomplete="email" /></label><label>{copy.contact.message}<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>{copy.contact.submit}</span></button><p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
+      </div><div class="direct-contact"><p>{copy.contact.direct}</p><address>{phone ? <a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a> : <span><img src="/assets/phone.svg" alt="" />{phoneDisplay}</span>}{email ? <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{emailDisplay}</a> : <span><img src="/assets/email.svg" alt="" />{emailDisplay}</span>}<span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">{copy.contact.social}</p><div class="socials">{whatsappUrl ? <a href={whatsappUrl} rel="noopener" aria-label={copy.contact.whatsappLabel}><img src="/assets/whatsapp.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/whatsapp.svg" alt="" /></span>}{facebookUrl ? <a href={facebookUrl} rel="noopener" aria-label={copy.contact.facebookLabel}><img src="/assets/facebook.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/facebook.svg" alt="" /></span>}</div></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label={copy.footer.navLabel}><a href="#diensten">{copy.footer.services}</a><a href="#over-thomas">{copy.footer.about}</a><a href="#werkgebied">{copy.footer.area}</a><a href="#contact">{copy.footer.contact}</a></nav><p>{copy.footer.lines[0]}<br />{copy.footer.lines[1]}<br />{copy.footer.lines[2]}</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span>{copy.footer.tagline}</span></div></div></footer>
+  <script>
+    const serviceButtons = [...document.querySelectorAll<HTMLButtonElement>('.service-trigger')];
+    serviceButtons.forEach((button) => button.addEventListener('click', () => {
+      if (button.getAttribute('aria-expanded') === 'true') return;
+
+      serviceButtons.forEach((otherButton) => {
+        const isActive = otherButton === button;
+        const item = otherButton.closest<HTMLElement>('[data-service]');
+        const panel = item?.querySelector<HTMLElement>('.service-expanded');
+        otherButton.setAttribute('aria-expanded', String(isActive));
+        panel?.setAttribute('aria-hidden', String(!isActive));
+        item?.classList.toggle('is-open', isActive);
+      });
+    }));
+    document.querySelector<HTMLFormElement>('#contact-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const buttonLabel = button?.querySelector('span');
+      const status = form.querySelector<HTMLElement>('[data-form-status]');
+      const idleLabel = buttonLabel?.textContent ?? '';
+      const formData = new FormData(form);
+      const body = new URLSearchParams();
+      formData.forEach((value, key) => body.append(key, String(value)));
+
+      if (button) button.disabled = true;
+      if (buttonLabel) buttonLabel.textContent = form.dataset.sendingMessage ?? idleLabel;
+      if (status) { status.textContent = ''; status.className = 'form-status'; }
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString(),
+        });
+        if (!response.ok) throw new Error('Formulier kon niet worden verzonden');
+        form.reset();
+        if (status) { status.textContent = form.dataset.successMessage ?? ''; status.classList.add('is-success'); }
+      } catch {
+        if (status) { status.textContent = form.dataset.errorMessage ?? ''; status.classList.add('is-error'); }
+      } finally {
+        if (button) button.disabled = false;
+        if (buttonLabel) buttonLabel.textContent = idleLabel;
+      }
+    });
+
+    const reviewSlider = document.querySelector<HTMLElement>('[data-review-slider]');
+    const reviewViewport = reviewSlider?.querySelector<HTMLElement>('[data-review-viewport]');
+    const reviewDots = reviewSlider?.querySelector<HTMLElement>('[data-review-dots]');
+    let reviewIndex = 0;
+    let reviewTimer: number | undefined;
+    let reviewResumeTimer: number | undefined;
+    let reviewPositions = 1;
+    const reviewAutoplayDelay = 2500;
+    const reviewStep = () => {
+      if (!reviewViewport) return reviewViewport?.clientWidth ?? 0;
+      const card = reviewViewport.querySelector<HTMLElement>('.review-card');
+      const grid = reviewViewport.querySelector<HTMLElement>('.review-grid');
+      const gap = grid ? Number.parseFloat(getComputedStyle(grid).columnGap) || 0 : 0;
+      return (card?.offsetWidth ?? reviewViewport.clientWidth) + gap;
+    };
+    const renderReviewDots = () => {
+      if (!reviewDots || !reviewViewport) return;
+      const step = reviewStep();
+      reviewPositions = Math.max(1, Math.round((reviewViewport.scrollWidth - reviewViewport.clientWidth) / step) + 1);
+      reviewIndex = Math.min(reviewIndex, reviewPositions - 1);
+      reviewDots.replaceChildren(...Array.from({ length: reviewPositions }, (_, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'review-dot';
+        dot.setAttribute('aria-label', `${reviewSlider?.dataset.positionLabel ?? 'Review'} ${index + 1}`);
+        dot.setAttribute('aria-current', String(index === reviewIndex));
+        dot.addEventListener('click', () => goToReview(index));
+        return dot;
+      }));
+    };
+    const updateReviewDots = () => reviewDots?.querySelectorAll<HTMLButtonElement>('.review-dot').forEach((dot, index) => dot.setAttribute('aria-current', String(index === reviewIndex)));
+    const goToReview = (index: number) => {
+      if (!reviewViewport) return;
+      reviewIndex = (index + reviewPositions) % reviewPositions;
+      updateReviewDots();
+      reviewViewport.scrollTo({ left: reviewIndex * reviewStep(), behavior: 'smooth' });
+    };
+    const updateReviewSlider = () => {
+      if (!reviewSlider || !reviewViewport) return;
+      const atEnd = reviewViewport.scrollLeft + reviewViewport.clientWidth >= reviewViewport.scrollWidth - 4;
+      reviewIndex = Math.min(reviewPositions - 1, Math.max(0, Math.round(reviewViewport.scrollLeft / reviewStep())));
+      updateReviewDots();
+      reviewSlider.classList.toggle('can-scroll-back', reviewViewport.scrollLeft > 4);
+      reviewSlider.classList.toggle('is-at-end', atEnd);
+    };
+    const stopReviewAutoplay = () => window.clearInterval(reviewTimer);
+    const startReviewAutoplay = () => {
+      stopReviewAutoplay();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || reviewPositions <= 1) return;
+      reviewTimer = window.setInterval(() => {
+        const nextIndex = reviewIndex >= reviewPositions - 1 ? 0 : reviewIndex + 1;
+        goToReview(nextIndex);
+      }, reviewAutoplayDelay);
+    };
+    const resumeReviewAutoplay = () => {
+      window.clearTimeout(reviewResumeTimer);
+      reviewResumeTimer = window.setTimeout(startReviewAutoplay, 600);
+    };
+    reviewViewport?.addEventListener('scroll', () => {
+      updateReviewSlider();
+      stopReviewAutoplay();
+      resumeReviewAutoplay();
+    }, { passive: true });
+    reviewViewport?.addEventListener('wheel', () => { stopReviewAutoplay(); resumeReviewAutoplay(); }, { passive: true });
+    reviewViewport?.addEventListener('pointerdown', stopReviewAutoplay);
+    reviewViewport?.addEventListener('pointerup', resumeReviewAutoplay);
+    reviewViewport?.addEventListener('pointercancel', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('pointerenter', stopReviewAutoplay);
+    reviewSlider?.addEventListener('pointerleave', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('focusin', stopReviewAutoplay);
+    reviewSlider?.addEventListener('focusout', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('touchstart', stopReviewAutoplay, { passive: true });
+    reviewSlider?.addEventListener('touchend', resumeReviewAutoplay, { passive: true });
+    reviewSlider?.addEventListener('touchcancel', resumeReviewAutoplay, { passive: true });
+    document.addEventListener('visibilitychange', () => document.hidden ? stopReviewAutoplay() : resumeReviewAutoplay());
+    window.addEventListener('resize', () => { renderReviewDots(); updateReviewSlider(); startReviewAutoplay(); });
+    renderReviewDots();
+    updateReviewSlider();
+    startReviewAutoplay();
+
+    const revealGroups = [
+      '.trust-item',
+      '.services-grid > *',
+      '.reviews > .shell > h2, .reviews > .shell > .section-lead',
+      '.review-card',
+      '.about-grid > *',
+      '.area-grid > *',
+      '.contact-grid > *',
+      '.footer-grid > *, .legal',
+    ];
+    const revealItems = revealGroups.flatMap((selector) => [...document.querySelectorAll<HTMLElement>(selector)]);
+    document.documentElement.classList.add('reveal-ready');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    } else {
+      revealGroups.forEach((selector) => {
+        document.querySelectorAll<HTMLElement>(selector).forEach((item, index) => {
+          item.classList.add('reveal');
+          item.style.setProperty('--reveal-delay', `${Math.min(index * 70, 280)}ms`);
+        });
+      });
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
+  </script>
+</BaseLayout>
