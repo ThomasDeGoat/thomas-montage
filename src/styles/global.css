@@ -101,6 +101,18 @@ h2 {
 section[id] {
   scroll-margin-top: calc(var(--header-height) + 16px);
 }
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .section-lead {
   max-width: 620px;
   color: var(--muted);
@@ -308,6 +320,12 @@ section[id] {
   color: var(--cream);
   font-size: 2rem;
   line-height: 1;
+}
+.phosphor-icon {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
 }
 .trust-copy {
   display: flex;
@@ -585,7 +603,8 @@ blockquote {
   display: flex;
   gap: 10px;
 }
-.socials a {
+.socials a,
+.socials span {
   display: grid;
   place-items: center;
   width: 42px;

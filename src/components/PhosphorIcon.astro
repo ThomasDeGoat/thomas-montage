@@ -1,0 +1,15 @@
+---
+import iconSet from '../../node_modules/@phosphor-icons/web/src/duotone/selection.json';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const icon = iconSet.icons.find((entry) => entry.properties.name.split(', ')[0] === `${name}-duotone`);
+if (!icon) throw new Error(`Onbekend Phosphor-icoon: ${name}`);
+---
+<svg class:list={['phosphor-icon', className]} viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+  {icon.icon.paths.map((path, index) => <path d={path} fill="currentColor" opacity={icon.icon.attrs[index]?.opacity ?? 1} />)}
+</svg>

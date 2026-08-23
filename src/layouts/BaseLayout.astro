@@ -1,9 +1,13 @@
 ---
-import '@phosphor-icons/web/duotone';
 import '../styles/global.css';
 
-interface Props { title: string; description: string; image?: string; }
-const { title, description, image = '/assets/og-image.webp' } = Astro.props;
+interface Props { title: string; description: string; image?: string; imageAlt?: string; }
+const {
+  title,
+  description,
+  image = '/assets/og-image.webp',
+  imageAlt = 'Thomas Montage & Klussen in Bierbeek',
+} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const socialImage = new URL(image, Astro.site ?? Astro.url);
 ---
@@ -12,16 +16,20 @@ const socialImage = new URL(image, Astro.site ?? Astro.url);
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f6f2ea" />
-  <meta name="description" content={description} /><meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="color-scheme" content="light" />
+  <meta name="application-name" content="Thomas Montage & Klussen" />
+  <meta name="author" content="Thomas Montage & Klussen" />
+  <meta name="description" content={description} /><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href={canonical} /><link rel="alternate" hreflang="nl-BE" href={canonical} />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <meta property="og:type" content="website" /><meta property="og:locale" content="nl_BE" />
+  <meta property="og:type" content="website" /><meta property="og:locale" content="nl_BE" /><meta property="og:site_name" content="Thomas Montage & Klussen" />
   <meta property="og:title" content={title} /><meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} /><meta property="og:image" content={socialImage} />
+  <meta property="og:image:type" content="image/webp" /><meta property="og:image:width" content="1280" /><meta property="og:image:height" content="832" /><meta property="og:image:alt" content={imageAlt} />
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} /><meta name="twitter:image" content={socialImage} />
+  <meta name="twitter:description" content={description} /><meta name="twitter:image" content={socialImage} /><meta name="twitter:image:alt" content={imageAlt} />
   <title>{title}</title><slot name="head" />
 </head>
 <body><a class="skip-link" href="#inhoud">Ga naar de inhoud</a><slot /></body>

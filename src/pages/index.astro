@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import PhosphorIcon from '../components/PhosphorIcon.astro';
 import heroChair from '../assets/hero-chair-shadowless.webp?url';
 import heroNightstand from '../assets/hero-nightstand-shadowless.webp?url';
 import heroTable from '../assets/hero-table-shadowless.webp?url';
@@ -12,8 +13,8 @@ import servicePrijzen from '../assets/service-prijzen.webp';
 import thomas from '../assets/thomas.webp';
 import { reviews } from '../data/reviews.js';
 
-const title = 'Meubelmontage en klusjesman in Bierbeek | Thomas';
-const description = 'Thomas helpt particulieren en bedrijven in Bierbeek en Leuven met meubelmontage, kleine herstellingen en praktische klussen. Duidelijk afgesproken en zorgvuldig afgewerkt.';
+const title = 'Klusjesman in Bierbeek voor montage & klussen | Thomas';
+const description = 'Klusjesman in Bierbeek of Leuven nodig? Thomas helpt particulieren en bedrijven met meubelmontage, kleine herstellingen en praktische klussen.';
 const promises = [
   { icon: 'users-three', label: 'Voor iedereen', sub: 'Particulier & bedrijf' },
   { icon: 'handshake', label: 'Duidelijke afspraken', sub: 'Geen verrassingen' },
@@ -27,11 +28,76 @@ const services = [
   { n:'04', title:'Eerlijke prijzen', text:'Particulieren kiezen voor een tegoedregeling of tevredenheidsprijs. Bedrijven krijgen duidelijke vaste tarieven en een correcte factuur.', image:servicePrijzen, alt:'Overleg over een prijsinschatting voor een klus' },
 ];
 const hasReviewOverflow = reviews.length > 3;
+const siteUrl = new URL('/', Astro.site ?? Astro.url).href;
+const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const businessId = new URL('/#bedrijf', siteUrl).href;
+const websiteId = new URL('/#website', siteUrl).href;
+const pageId = new URL('/#webpagina', siteUrl).href;
+const phone = import.meta.env.PUBLIC_PHONE_E164;
+const phoneDisplay = import.meta.env.PUBLIC_PHONE_DISPLAY || '+32 4XX XX XX XX';
+const email = import.meta.env.PUBLIC_EMAIL;
+const emailDisplay = email || 'info@thomas.be';
+const whatsappUrl = import.meta.env.PUBLIC_WHATSAPP_URL;
+const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL;
+const socialProfiles = [facebookUrl].filter(Boolean);
 const structuredData = {
-  '@context':'https://schema.org','@type':'HomeAndConstructionBusiness',name:'Thomas Montage & Klussen',
-  url:Astro.site?.href ?? 'https://thomas-montage.be',image:new URL('/assets/og-image.webp', Astro.site ?? Astro.url).href,description,
-  address:{'@type':'PostalAddress',streetAddress:'Merbeekstraat 1',postalCode:'3360',addressLocality:'Bierbeek',addressCountry:'BE'},
-  areaServed:['Bierbeek','Leuven','Vlaams-Brabant'],
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'HomeAndConstructionBusiness',
+      '@id': businessId,
+      name: 'Thomas Montage & Klussen',
+      url: siteUrl,
+      logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', siteUrl).href },
+      image: new URL('/assets/og-image.webp', siteUrl).href,
+      description,
+      founder: { '@type': 'Person', name: 'Thomas' },
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Merbeekstraat 1',
+        postalCode: '3360',
+        addressLocality: 'Bierbeek',
+        addressRegion: 'Vlaams-Brabant',
+        addressCountry: 'BE',
+      },
+      areaServed: [
+        { '@type': 'City', name: 'Bierbeek' },
+        { '@type': 'City', name: 'Leuven' },
+        { '@type': 'AdministrativeArea', name: 'Vlaams-Brabant' },
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Montage- en klusdiensten',
+        itemListElement: services.slice(0, 3).map((service) => ({
+          '@type': 'Offer',
+          itemOffered: { '@type': 'Service', name: service.title, description: service.text, provider: { '@id': businessId } },
+        })),
+      },
+      ...(phone ? { telephone: phone } : {}),
+      ...(email ? { email } : {}),
+      ...(socialProfiles.length ? { sameAs: socialProfiles } : {}),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': websiteId,
+      url: siteUrl,
+      name: 'Thomas Montage & Klussen',
+      alternateName: 'Thomas',
+      inLanguage: 'nl-BE',
+      publisher: { '@id': businessId },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': pageId,
+      url: pageUrl,
+      name: title,
+      description,
+      inLanguage: 'nl-BE',
+      isPartOf: { '@id': websiteId },
+      about: { '@id': businessId },
+      primaryImageOfPage: { '@type': 'ImageObject', url: new URL('/assets/og-image.webp', siteUrl).href },
+    },
+  ],
 };
 ---
 <BaseLayout {title} {description}>
@@ -40,8 +106,9 @@ const structuredData = {
   <main id="inhoud">
     <section class="hero" id="top"><div class="shell">
       <div class="hero-grid"><div class="hero-copy">
+        <p class="eyebrow">Meubelmontage & praktische klussen in Bierbeek en Leuven</p>
         <h1><span>De klus gedaan.</span><span>Zonder gedoe.</span></h1>
-        <p>Praktische hulp voor particulieren en bedrijven. Zorgvuldig uitgevoerd, duidelijk afgesproken en correct afgewerkt.</p>
+        <p>Thomas helpt particulieren en bedrijven met meubelmontage, kleine herstellingen en praktische klussen. Zorgvuldig uitgevoerd, duidelijk afgesproken en correct afgewerkt.</p>
         <div class="actions"><a class="button" href="#contact"><span>Neem contact op</span></a><a class="button button--outline" href="#diensten"><span>Bekijk diensten</span></a></div>
       </div><div class="hero-art">
         <svg class="hero-artwork" viewBox="0 0 625 801" role="img" aria-labelledby="hero-art-title">
@@ -61,13 +128,13 @@ const structuredData = {
     </div></section>
 
     <section class="trust" aria-label="Onze beloftes"><div class="shell trust-grid">
-      {promises.map(({icon,label,sub}) => <div class="trust-item"><span class="trust-icon" aria-hidden="true"><i class:list={['ph-duotone', `ph-${icon}`]}></i></span><span class="trust-copy"><b>{label}</b><small>{sub}</small></span></div>)}
+      {promises.map(({icon,label,sub}) => <div class="trust-item"><span class="trust-icon" aria-hidden="true"><PhosphorIcon name={icon} /></span><span class="trust-copy"><b>{label}</b><small>{sub}</small></span></div>)}
     </div></section>
 
     <section class="section services" id="diensten"><div class="shell services-grid">
-      <div class="section-intro"><h2>Vakwerk,<br />zonder gedoe.</h2><p>Praktische hulp voor kleine en grotere klussen, thuis of op het werk. Zorgvuldig uitgevoerd en duidelijk afgesproken.</p><a class="button" href="#contact"><span>Neem contact op</span></a></div>
+      <div class="section-intro"><h2>Vakwerk,<br />zonder gedoe.</h2><p>Van meubelmontage tot kleine herstellingen in Bierbeek en Leuven: praktische hulp voor kleine en grotere klussen, thuis of op het werk.</p><a class="button" href="#contact"><span>Neem contact op</span></a></div>
       <div class="service-list"><p class="service-tagline"></p>
-        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><button class="service-trigger" type="button" aria-label={service.title} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden="true"><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} loading="lazy" decoding="async" /></span></span></span></button></article>)}
+        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><h3 class="sr-only" id={"service-title-" + index}>{service.title}</h3><button class="service-trigger" type="button" aria-labelledby={"service-title-" + index} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden={index !== 0}><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} loading="lazy" decoding="async" /></span></span></span></button></article>)}
       </div>
     </div></section>
 
@@ -86,7 +153,7 @@ const structuredData = {
       <div><h2>Een rustige doener met oog voor detail.</h2><p>Ik ben Thomas, een praktische doener die graag met zijn handen werkt. Ik haal er voldoening uit om problemen op te lossen en iets netjes afgewerkt achter te laten. Mensen omschrijven mij als rustig, betrouwbaar en nauwkeurig. Persoonlijk contact vind ik belangrijk: eenvoudig overleggen, eerlijk afspreken en goed werk afleveren.</p></div>
     </div></section>
 
-    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>Actief in Bierbeek<br />en omgeving.</h2><p>Thomas helpt particulieren en bedrijven in Bierbeek, Leuven en omliggende gemeenten. Twijfel je of jouw gemeente erbij hoort? Neem gerust contact op.</p></div><ol><li><i class="area-icon ph-duotone ph-house-line" aria-hidden="true"></i><span class="area-label">Bierbeek</span></li><li><i class="area-icon ph-duotone ph-buildings" aria-hidden="true"></i><span class="area-label">Leuven</span></li><li><i class="area-icon ph-duotone ph-map-trifold" aria-hidden="true"></i><span class="area-label">Omliggende gemeenten</span></li></ol></div></section>
+    <section class="section area" id="werkgebied"><div class="shell area-grid"><div><h2>Actief in Bierbeek<br />en omgeving.</h2><p>Thomas helpt particulieren en bedrijven in Bierbeek, Leuven en omliggende gemeenten. Twijfel je of jouw gemeente erbij hoort? Neem gerust contact op.</p></div><ol><li><PhosphorIcon name="house-line" class="area-icon" /><span class="area-label">Bierbeek</span></li><li><PhosphorIcon name="buildings" class="area-icon" /><span class="area-label">Leuven</span></li><li><PhosphorIcon name="map-trifold" class="area-icon" /><span class="area-label">Omliggende gemeenten</span></li></ol></div></section>
 
     <section class="contact" id="contact"><div class="shell contact-grid">
       <div><h2>Heb je een vraag?</h2><p>Een klus of vraag in gedachten? Neem gerust contact op. Ik bespreek graag de mogelijkheden en bezorg je snel een duidelijke, vrijblijvende prijsinschatting.</p>
@@ -95,7 +162,7 @@ const structuredData = {
           <p class="form-honeypot" aria-hidden="true"><label>Laat dit veld leeg<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
           <label>Naam<input required name="name" autocomplete="name" /></label><label>E-mail<input required type="email" name="email" autocomplete="email" /></label><label>Bericht<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>Verstuur bericht</span></button><p class="form-status" data-form-status role="status" aria-live="polite"></p>
         </form>
-      </div><div class="direct-contact"><p>Liever rechtstreeks contact? Je bereikt Thomas via onderstaande gegevens.</p><address><a href="tel:+324XXXXXXXX"><img src="/assets/phone.svg" alt="" />+32 4XX XX XX XX</a><a href="mailto:info@thomas.be"><img src="/assets/email.svg" alt="" />info@thomas.be</a><span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">Ook bereikbaar via WhatsApp en Facebook</p><div class="socials"><a href="https://wa.me/324XXXXXXXX" aria-label="Neem contact op via WhatsApp"><img src="/assets/whatsapp.svg" alt="" /></a><a href="#" aria-label="Bekijk Thomas op Facebook"><img src="/assets/facebook.svg" alt="" /></a></div></div>
+      </div><div class="direct-contact"><p>Liever rechtstreeks contact? Je bereikt Thomas via onderstaande gegevens.</p><address>{phone ? <a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a> : <span><img src="/assets/phone.svg" alt="" />{phoneDisplay}</span>}{email ? <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{emailDisplay}</a> : <span><img src="/assets/email.svg" alt="" />{emailDisplay}</span>}<span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">Ook bereikbaar via WhatsApp en Facebook</p><div class="socials">{whatsappUrl ? <a href={whatsappUrl} rel="noopener" aria-label="Neem contact op via WhatsApp"><img src="/assets/whatsapp.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/whatsapp.svg" alt="" /></span>}{facebookUrl ? <a href={facebookUrl} rel="noopener" aria-label="Bekijk Thomas op Facebook"><img src="/assets/facebook.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/facebook.svg" alt="" /></span>}</div></div>
     </div></section>
   </main>
   <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label="Voettekst"><a href="#diensten">Diensten</a><a href="#over-thomas">Over Thomas</a><a href="#diensten">Werkwijze</a><a href="#contact">Contact</a></nav><p>Voor particulieren en bedrijven<br />Duidelijke afspraken<br />Zorgvuldig afgewerkt</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span>Persoonlijk · praktisch · transparant</span></div></div></footer>
@@ -107,7 +174,9 @@ const structuredData = {
       serviceButtons.forEach((otherButton) => {
         const isActive = otherButton === button;
         const item = otherButton.closest<HTMLElement>('[data-service]');
+        const panel = item?.querySelector<HTMLElement>('.service-expanded');
         otherButton.setAttribute('aria-expanded', String(isActive));
+        panel?.setAttribute('aria-hidden', String(!isActive));
         item?.classList.toggle('is-open', isActive);
       });
     }));
