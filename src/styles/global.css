@@ -370,7 +370,119 @@ section[id] {
   border-bottom: 1px solid var(--line);
 }
 /* ========================================
-   7. Reviews
+   7. Pricing
+   ======================================== */
+.pricing {
+  background: var(--green);
+  color: var(--cream);
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: minmax(440px, 1.18fr) minmax(0, 0.82fr);
+  align-items: center;
+  gap: clamp(64px, 8vw, 120px);
+}
+.pricing .eyebrow {
+  color: #d3b28e;
+}
+.pricing h2 {
+  max-width: 520px;
+  color: var(--cream);
+}
+.pricing-intro > p:not(.eyebrow) {
+  max-width: 500px;
+  color: rgba(246, 242, 234, 0.78);
+}
+.pricing-intro .button {
+  margin-top: 22px;
+}
+.pricing-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.pricing-list thead {
+  color: rgba(246, 242, 234, 0.62);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.pricing-list th,
+.pricing-list td {
+  padding: 18px 0;
+  text-align: left;
+}
+.pricing-list thead th:last-child,
+.pricing-list td {
+  text-align: right;
+}
+.pricing-list tbody tr {
+  border-top: 1px solid rgba(246, 242, 234, 0.22);
+}
+.pricing-list tbody tr:last-child {
+  border-bottom: 1px solid rgba(246, 242, 234, 0.22);
+}
+.pricing-list tbody th {
+  padding-right: 24px;
+  font-weight: 600;
+}
+.pricing-list td {
+  color: var(--cream);
+  font-family: Epilogue, Inter, sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pricing-note {
+  margin: 22px 0 0;
+  color: rgba(246, 242, 234, 0.65);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .pricing-intro {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 680px) {
+  .pricing {
+    padding-block: 68px;
+  }
+  .pricing-grid {
+    gap: 38px;
+  }
+  .pricing-intro {
+    order: -1;
+    text-align: center;
+  }
+  .pricing-intro > p:not(.eyebrow) {
+    margin-inline: auto;
+  }
+  .pricing-intro .button {
+    margin-inline: auto;
+  }
+  .pricing-list th,
+  .pricing-list td {
+    padding-block: 16px;
+  }
+  .pricing-list tbody th {
+    padding-right: 14px;
+  }
+  .pricing-list td {
+    font-size: 0.94rem;
+  }
+  .pricing-note {
+    text-align: center;
+  }
+}
+
+/* ========================================
+   8. Reviews
    ======================================== */
 .reviews {
   background: var(--sand);

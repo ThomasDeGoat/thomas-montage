@@ -36,12 +36,12 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 const businessId = new URL('/#bedrijf', siteUrl).href;
 const websiteId = new URL('/#website', siteUrl).href;
 const pageId = new URL(Astro.url.pathname + '#webpagina', siteUrl).href;
-const phone = import.meta.env.PUBLIC_PHONE_E164;
-const phoneDisplay = import.meta.env.PUBLIC_PHONE_DISPLAY || '+32 4XX XX XX XX';
-const email = import.meta.env.PUBLIC_EMAIL;
-const emailDisplay = email || 'info@thomas.be';
-const whatsappUrl = import.meta.env.PUBLIC_WHATSAPP_URL;
-const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL;
+const phone = import.meta.env.PUBLIC_PHONE_E164 || '+32473372408';
+const phoneDisplay = import.meta.env.PUBLIC_PHONE_DISPLAY || '+32 473 37 24 08';
+const email = import.meta.env.PUBLIC_EMAIL || 'thomas.deschuyteneer07@gmail.com';
+const whatsappUrl = import.meta.env.PUBLIC_WHATSAPP_URL || 'https://wa.me/32473372408';
+const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL || 'https://www.facebook.com/profile.php?id=100008990770669';
+const socialLabel = whatsappUrl && facebookUrl ? copy.contact.social : whatsappUrl ? copy.contact.socialWhatsapp : copy.contact.socialFacebook;
 const socialProfiles = [facebookUrl].filter(Boolean);
 const structuredData = {
   '@context': 'https://schema.org',
@@ -57,10 +57,10 @@ const structuredData = {
       founder: { '@type': 'Person', name: 'Thomas', knowsLanguage: ['nl', 'fr'] },
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Merbeekstraat 1',
-        postalCode: '3360',
-        addressLocality: 'Bierbeek',
-        addressRegion: 'Vlaams-Brabant',
+        streetAddress: 'Rue Longue 190',
+        postalCode: '1320',
+        addressLocality: 'Beauvechain',
+        addressRegion: 'Walloon Brabant',
         addressCountry: 'BE',
       },
       areaServed: [
@@ -140,9 +140,25 @@ const structuredData = {
       <div class="service-list"><p class="service-tagline"></p>
         {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><h3 class="sr-only" id={"service-title-" + index}>{service.title}</h3><button class="service-trigger" type="button" aria-labelledby={"service-title-" + index} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden={index !== 0}><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} loading="lazy" decoding="async" /></span></span></span></button></article>)}
       </div>
-    </div></section>
+</div></section>
 
-    <section class="section reviews" aria-labelledby="reviews-title"><div class="shell">
+<section class="section pricing" id="tarieven" aria-labelledby="pricing-title"><div class="shell pricing-grid">
+  <div class="pricing-list">
+    <table>
+      <caption class="sr-only">{copy.pricing.heading}</caption>
+      <thead><tr><th scope="col">{copy.pricing.columnService}</th><th scope="col">{copy.pricing.columnPrice}</th></tr></thead>
+      <tbody>{copy.pricing.items.map((item) => <tr><th scope="row">{item.service}</th><td>{item.price}</td></tr>)}</tbody>
+    </table>
+    <p class="pricing-note">{copy.pricing.note}</p>
+  </div>
+  <div class="pricing-intro">
+    <h2 id="pricing-title">{copy.pricing.heading}</h2>
+    <p>{copy.pricing.body}</p>
+    <a class="button button--light" href="#contact"><span>{copy.pricing.cta}</span></a>
+  </div>
+</div></section>
+
+<section class="section reviews" aria-labelledby="reviews-title"><div class="shell">
       <h2 id="reviews-title">{copy.reviews.heading}</h2><p class="section-lead">{copy.reviews.lead}</p>
       <div class:list={['review-slider', { 'has-overflow': hasReviewOverflow }]} data-review-slider data-position-label={copy.reviews.positionLabel}>
         <div class="review-viewport" data-review-viewport tabindex={hasReviewOverflow ? '0' : undefined} aria-label={copy.reviews.regionLabel}>
@@ -166,10 +182,10 @@ const structuredData = {
           <p class="form-honeypot" aria-hidden="true"><label>{copy.contact.honeypot}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
           <label>{copy.contact.name}<input required name="name" autocomplete="name" /></label><label>{copy.contact.email}<input required type="email" name="email" autocomplete="email" /></label><label>{copy.contact.message}<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>{copy.contact.submit}</span></button><p class="form-status" data-form-status role="status" aria-live="polite"></p>
         </form>
-      </div><div class="direct-contact"><p>{copy.contact.direct}</p><address>{phone ? <a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a> : <span><img src="/assets/phone.svg" alt="" />{phoneDisplay}</span>}{email ? <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{emailDisplay}</a> : <span><img src="/assets/email.svg" alt="" />{emailDisplay}</span>}<span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">{copy.contact.social}</p><div class="socials">{whatsappUrl ? <a href={whatsappUrl} rel="noopener" aria-label={copy.contact.whatsappLabel}><img src="/assets/whatsapp.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/whatsapp.svg" alt="" /></span>}{facebookUrl ? <a href={facebookUrl} rel="noopener" aria-label={copy.contact.facebookLabel}><img src="/assets/facebook.svg" alt="" /></a> : <span aria-hidden="true"><img src="/assets/facebook.svg" alt="" /></span>}</div></div>
+      </div><div class="direct-contact"><p>{copy.contact.direct}</p><address><a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a>{email && <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{email}</a>}<span><img src="/assets/location.svg" alt="" />Rue Longue 190, 1320 Beauvechain</span></address>{(whatsappUrl || facebookUrl) && <><p class="social-label">{socialLabel}</p><div class="socials">{whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.whatsappLabel}><img src="/assets/whatsapp.svg" alt="" /></a>}{facebookUrl && <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.facebookLabel}><img src="/assets/facebook.svg" alt="" /></a>}</div></>}</div>
     </div></section>
   </main>
-  <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label={copy.footer.navLabel}><a href="#diensten">{copy.footer.services}</a><a href="#over-thomas">{copy.footer.about}</a><a href="#werkgebied">{copy.footer.area}</a><a href="#contact">{copy.footer.contact}</a></nav><p>{copy.footer.lines[0]}<br />{copy.footer.lines[1]}<br />{copy.footer.lines[2]}</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span>{copy.footer.tagline}</span></div></div></footer>
+  <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label={copy.footer.navLabel}><a href="#diensten">{copy.footer.services}</a><a href="#tarieven">{copy.footer.pricing}</a><a href="#over-thomas">{copy.footer.about}</a><a href="#werkgebied">{copy.footer.area}</a><a href="#contact">{copy.footer.contact}</a></nav><p>{copy.footer.lines[0]}<br />{copy.footer.lines[1]}<br />{copy.footer.lines[2]}</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span>{copy.footer.tagline}</span></div></div></footer>
   <script>
     const serviceButtons = [...document.querySelectorAll<HTMLButtonElement>('.service-trigger')];
     serviceButtons.forEach((button) => button.addEventListener('click', () => {
@@ -299,6 +315,7 @@ const structuredData = {
     const revealGroups = [
       '.trust-item',
       '.services-grid > *',
+      '.pricing-grid > *',
       '.reviews > .shell > h2, .reviews > .shell > .section-lead',
       '.review-card',
       '.about-grid > *',

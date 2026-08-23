@@ -13,7 +13,7 @@ npm run dev
 
 Kopieer `.env.example` naar `.env` en vul de definitieve domeinnaam in. Bouw daarna met `npm run build`.
 
-Voor publicatie moeten het telefoonnummer, e-mailadres, WhatsAppnummer, Facebookadres en de tijdelijke reviews nog door echte gegevens worden vervangen.
+Voor publicatie moeten het definitieve e-mailadres, een eventueel WhatsAppadres, de ondernemingsgegevens en de tijdelijke reviews nog worden ingevuld.
 
 ## Netlify Forms
 
