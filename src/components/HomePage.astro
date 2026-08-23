@@ -6,7 +6,6 @@ import PhosphorIcon from '../components/PhosphorIcon.astro';
 import heroChair from '../assets/hero-chair-shadowless.webp?url';
 import heroNightstand from '../assets/hero-nightstand-shadowless.webp?url';
 import heroTable from '../assets/hero-table-shadowless.webp?url';
-import ogImage from '../assets/OG.png?url';
 import serviceMeubelmontage from '../assets/service-meubelmontage.webp';
 import serviceHerstellingen from '../assets/service-herstellingen.webp';
 import serviceDoeHetZelf from '../assets/service-doe-het-zelf.webp';
@@ -18,6 +17,7 @@ import { content } from '../data/content.js';
 interface Props { locale?: 'nl' | 'fr'; }
 const { locale = 'nl' } = Astro.props;
 const copy = content[locale];
+const ogImage = '/OG.png';
 const { title, description } = copy.meta;
 const promises = copy.promises;
 const serviceImages = [serviceMeubelmontage, serviceHerstellingen, serviceDoeHetZelf, servicePrijzen];

@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import defaultSocialImage from '../assets/OG.png?url';
 
 interface Props {
   title: string;
@@ -14,7 +13,7 @@ interface Props {
 const {
   title,
   description,
-  image = defaultSocialImage,
+  image = '/OG.png',
   imageAlt = 'Thomas Montage & Klussen',
   locale = 'nl',
   skipLink = locale === 'fr' ? 'Aller au contenu' : 'Ga naar de inhoud',
