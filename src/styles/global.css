@@ -534,6 +534,31 @@ blockquote {
   justify-self: start;
   margin-top: 7px;
 }
+.form-honeypot {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.contact form .button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+.contact .form-status {
+  min-height: 1.5em;
+  margin: 0;
+  color: rgba(246, 242, 234, 0.8);
+  font-size: 0.84rem;
+}
+.contact .form-status.is-success {
+  color: #d9e8d3;
+}
+.contact .form-status.is-error {
+  color: #ffd2c7;
+}
 .direct-contact {
   padding-top: 52px;
 }
@@ -754,6 +779,141 @@ blockquote {
   }
   .review-card {
     padding: 24px;
+  }
+}
+
+/* ========================================
+   Review slider
+   ======================================== */
+.review-slider {
+  --review-gap: 32px;
+  --review-column: calc(33.333333% - 21.333333px);
+  --review-gutter: max(32px, calc(50vw - 580px));
+  position: relative;
+  width: 100vw;
+  margin: 42px calc(50% - 50vw) 0;
+}
+.review-viewport {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scroll-padding-inline: var(--review-gutter);
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.review-viewport::-webkit-scrollbar {
+  display: none;
+}
+.review-slider .review-grid {
+  display: grid;
+  grid-auto-flow: row;
+  gap: var(--review-gap);
+  margin-top: 0;
+  padding-left: var(--review-gutter);
+  padding-right: 0;
+  width: calc(100% - var(--review-gutter));
+}
+.review-slider .review-card,
+.review-slider .review-card:last-child {
+  width: 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.review-end-spacer {
+  display: block;
+  width: 100%;
+  min-width: 1px;
+  height: 1px;
+  align-self: start;
+}
+.avatar--cognac { background: var(--cognac); }
+.avatar--green { background: var(--green); }
+.avatar--sage { background: var(--sage); }
+.review-fade {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 40px;
+  width: 64px;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+.review-fade--left {
+  left: 0;
+  background: linear-gradient(90deg, var(--sand), rgba(233, 222, 207, 0));
+  opacity: 0;
+}
+.review-fade--right {
+  right: 0;
+  background: linear-gradient(90deg, rgba(233, 222, 207, 0), var(--sand));
+}
+.review-slider.can-scroll-back .review-fade--left {
+  opacity: 1;
+}
+.review-slider.is-at-end .review-fade--right {
+  opacity: 0;
+}
+.review-dots {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 20px;
+}
+.review-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(51, 63, 46, 0.28);
+  transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1), background-color 180ms ease, transform 180ms ease;
+}
+.review-dot[aria-current="true"] {
+  width: 24px;
+  background: var(--green);
+}
+.review-dot:focus-visible {
+  outline: 2px solid var(--cognac);
+  outline-offset: 4px;
+}
+@media (hover: hover) {
+  .review-dot:hover {
+    background: var(--cognac);
+    transform: scale(1.15);
+  }
+}
+@media (max-width: 1100px) {
+  .review-slider {
+    --review-gap: 18px;
+    --review-column: calc(33.333333% - 12px);
+    --review-gutter: max(32px, calc(50vw - 480px));
+  }
+}
+@media (max-width: 900px) {
+  .review-slider {
+    --review-gap: 22px;
+    --review-column: calc(50% - 11px);
+    --review-gutter: max(24px, calc(50vw - 380px));
+  }
+}
+@media (max-width: 680px) {
+  .review-slider {
+    --review-gap: 16px;
+    --review-column: 100%;
+    --review-gutter: 16px;
+    margin-top: 34px;
+  }
+  .review-fade {
+    display: none;
+  }
+}
+@media (min-width: 1440px) {
+  .review-slider {
+    --review-gutter: max(64px, calc(50vw - 660px));
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1929,6 +2089,38 @@ blockquote {
   .main-nav,
   .main-nav > a,
   .main-nav .button {
+    transition: none;
+  }
+}
+
+/* ========================================
+   One-time scroll reveals
+   ======================================== */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 720ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 680px) {
+  .reveal-ready .reveal {
+    transform: translateY(18px);
+  }
+  .reveal-ready .reveal.is-visible {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .reveal,
+  .reveal-ready .reveal.is-visible {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

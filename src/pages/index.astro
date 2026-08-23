@@ -8,6 +8,7 @@ import serviceHerstellingen from '../assets/service-herstellingen.png';
 import serviceDoeHetZelf from '../assets/service-doe-het-zelf.png';
 import servicePrijzen from '../assets/service-prijzen.png';
 import thomas from '../assets/thomas.png';
+import { reviews } from '../data/reviews.js';
 
 const title = 'Meubelmontage en klusjesman in Bierbeek | Thomas';
 const description = 'Thomas helpt particulieren en bedrijven in Bierbeek en Leuven met meubelmontage, kleine herstellingen en praktische klussen. Duidelijk afgesproken en zorgvuldig afgewerkt.';
@@ -23,11 +24,7 @@ const services = [
   { n:'03', title:'Doe-het-zelfondersteuning', text:'Een extra hand nodig? Ik help met eenvoudige klussen, zoals gordijnrails ophangen, rekjes monteren en andere kleine projecten.', image:serviceDoeHetZelf, alt:'Thomas bevestigt een gordijnrail met een boormachine' },
   { n:'04', title:'Eerlijke prijzen', text:'Particulieren kiezen voor een tegoedregeling of tevredenheidsprijs. Bedrijven krijgen duidelijke vaste tarieven en een correcte factuur.', image:servicePrijzen, alt:'Overleg over een prijsinschatting voor een klus' },
 ];
-const reviews = [
-  ['SP','Sofie Peeters','Particuliere klant','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
-  ['JV','Jonas Vermeulen','Particuliere klant','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
-  ['PD','Pieter De Smet','Zaakvoerder','Thomas monteerde onze nieuwe kasten snel en heel nauwkeurig. Alles stond stevig en de ruimte werd netjes achtergelaten.'],
-];
+const hasReviewOverflow = reviews.length > 3;
 const structuredData = {
   '@context':'https://schema.org','@type':'HomeAndConstructionBusiness',name:'Thomas Montage & Klussen',
   url:Astro.site?.href ?? 'https://thomas-montage.be',image:new URL('/assets/og-image.png', Astro.site ?? Astro.url).href,description,
@@ -62,7 +59,12 @@ const structuredData = {
 
     <section class="section reviews" aria-labelledby="reviews-title"><div class="shell">
       <h2 id="reviews-title">Wat zeggen de klanten?</h2><p class="section-lead">Van meubelmontage tot kleine herstellingen: dit vertellen klanten over Thomas.</p>
-      <div class="review-grid">{reviews.map(([initials,name,role,quote]) => <article class="review-card"><div class="review-person"><span class="avatar">{initials}</span><span><strong>{name}</strong><small>{role}</small></span></div><blockquote>“{quote}”</blockquote><div class="review-bottom"><img src="/assets/stars.svg" width="108" height="20" alt="5 van 5 sterren" /><time datetime="2026-08-22">22/08/2026</time></div></article>)}</div>
+      <div class:list={['review-slider', { 'has-overflow': hasReviewOverflow }]} data-review-slider>
+        <div class="review-viewport" data-review-viewport tabindex={hasReviewOverflow ? '0' : undefined} aria-label="Klantreviews">
+          <div class="review-grid" style={`grid-template-columns: repeat(${reviews.length}, var(--review-column)) max(0px, calc(var(--review-gutter) - var(--review-gap)));`}>{reviews.map(({initials,name,role,quote,date,dateLabel,rating,tone}) => <article class="review-card"><div class="review-person"><span class:list={['avatar', `avatar--${tone}`]}>{initials}</span><span><strong>{name}</strong><small>{role}</small></span></div><blockquote>“{quote}”</blockquote><div class="review-bottom"><img src="/assets/stars.svg" width="108" height="20" alt={`${rating} van 5 sterren`} /><time datetime={date}>{dateLabel}</time></div></article>)}<span class="review-end-spacer" aria-hidden="true"></span></div>
+        </div>
+        {hasReviewOverflow && <><span class="review-fade review-fade--left" aria-hidden="true"></span><span class="review-fade review-fade--right" aria-hidden="true"></span><div class="review-dots" data-review-dots aria-label="Reviewposities"></div></>}
+      </div>
     </div></section>
 
     <section class="section about" id="over-thomas"><div class="shell about-grid">
@@ -74,7 +76,11 @@ const structuredData = {
 
     <section class="contact" id="contact"><div class="shell contact-grid">
       <div><h2>Heb je een vraag?</h2><p>Een klus of vraag in gedachten? Neem gerust contact op. Ik bespreek graag de mogelijkheden en bezorg je snel een duidelijke, vrijblijvende prijsinschatting.</p>
-        <form id="contact-form"><label>Naam<input required name="name" autocomplete="name" /></label><label>E-mail<input required type="email" name="email" autocomplete="email" /></label><label>Bericht<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>Verstuur bericht</span></button></form>
+        <form id="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="form-honeypot" aria-hidden="true"><label>Laat dit veld leeg<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+          <label>Naam<input required name="name" autocomplete="name" /></label><label>E-mail<input required type="email" name="email" autocomplete="email" /></label><label>Bericht<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>Verstuur bericht</span></button><p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
       </div><div class="direct-contact"><p>Liever rechtstreeks contact? Je bereikt Thomas via onderstaande gegevens.</p><address><a href="tel:+324XXXXXXXX"><img src="/assets/phone.svg" alt="" />+32 4XX XX XX XX</a><a href="mailto:info@thomas.be"><img src="/assets/email.svg" alt="" />info@thomas.be</a><span><img src="/assets/location.svg" alt="" />Merbeekstraat 1, 3360 Bierbeek</span></address><p class="social-label">Ook bereikbaar via WhatsApp en Facebook</p><div class="socials"><a href="https://wa.me/324XXXXXXXX" aria-label="Neem contact op via WhatsApp"><img src="/assets/whatsapp.svg" alt="" /></a><a href="#" aria-label="Bekijk Thomas op Facebook"><img src="/assets/facebook.svg" alt="" /></a></div></div>
     </div></section>
   </main>
@@ -91,6 +97,147 @@ const structuredData = {
         item?.classList.toggle('is-open', isActive);
       });
     }));
-    document.querySelector<HTMLFormElement>('#contact-form')?.addEventListener('submit', (event) => { event.preventDefault(); const data = new FormData(event.currentTarget); const subject = encodeURIComponent(`Websiteaanvraag van ${data.get('name')}`); const body = encodeURIComponent(`${data.get('message')}\n\nNaam: ${data.get('name')}\nE-mail: ${data.get('email')}`); window.location.href = `mailto:info@thomas.be?subject=${subject}&body=${body}`; });
+    document.querySelector<HTMLFormElement>('#contact-form')?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const buttonLabel = button?.querySelector('span');
+      const status = form.querySelector<HTMLElement>('[data-form-status]');
+      const formData = new FormData(form);
+      const body = new URLSearchParams();
+      formData.forEach((value, key) => body.append(key, String(value)));
+
+      if (button) button.disabled = true;
+      if (buttonLabel) buttonLabel.textContent = 'Bezig met versturen…';
+      if (status) { status.textContent = ''; status.className = 'form-status'; }
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString(),
+        });
+        if (!response.ok) throw new Error('Formulier kon niet worden verzonden');
+        form.reset();
+        if (status) { status.textContent = 'Bedankt! Je bericht is goed verzonden. Thomas neemt zo snel mogelijk contact met je op.'; status.classList.add('is-success'); }
+      } catch {
+        if (status) { status.textContent = 'Het versturen is niet gelukt. Probeer het opnieuw of neem rechtstreeks contact op.'; status.classList.add('is-error'); }
+      } finally {
+        if (button) button.disabled = false;
+        if (buttonLabel) buttonLabel.textContent = 'Verstuur bericht';
+      }
+    });
+
+    const reviewSlider = document.querySelector<HTMLElement>('[data-review-slider]');
+    const reviewViewport = reviewSlider?.querySelector<HTMLElement>('[data-review-viewport]');
+    const reviewDots = reviewSlider?.querySelector<HTMLElement>('[data-review-dots]');
+    let reviewIndex = 0;
+    let reviewTimer: number | undefined;
+    let reviewResumeTimer: number | undefined;
+    let reviewPositions = 1;
+    const reviewAutoplayDelay = 2500;
+    const reviewStep = () => {
+      if (!reviewViewport) return reviewViewport?.clientWidth ?? 0;
+      const card = reviewViewport.querySelector<HTMLElement>('.review-card');
+      const grid = reviewViewport.querySelector<HTMLElement>('.review-grid');
+      const gap = grid ? Number.parseFloat(getComputedStyle(grid).columnGap) || 0 : 0;
+      return (card?.offsetWidth ?? reviewViewport.clientWidth) + gap;
+    };
+    const renderReviewDots = () => {
+      if (!reviewDots || !reviewViewport) return;
+      const step = reviewStep();
+      reviewPositions = Math.max(1, Math.round((reviewViewport.scrollWidth - reviewViewport.clientWidth) / step) + 1);
+      reviewIndex = Math.min(reviewIndex, reviewPositions - 1);
+      reviewDots.replaceChildren(...Array.from({ length: reviewPositions }, (_, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'review-dot';
+        dot.setAttribute('aria-label', `Ga naar reviewpositie ${index + 1}`);
+        dot.setAttribute('aria-current', String(index === reviewIndex));
+        dot.addEventListener('click', () => goToReview(index));
+        return dot;
+      }));
+    };
+    const updateReviewDots = () => reviewDots?.querySelectorAll<HTMLButtonElement>('.review-dot').forEach((dot, index) => dot.setAttribute('aria-current', String(index === reviewIndex)));
+    const goToReview = (index: number) => {
+      if (!reviewViewport) return;
+      reviewIndex = (index + reviewPositions) % reviewPositions;
+      updateReviewDots();
+      reviewViewport.scrollTo({ left: reviewIndex * reviewStep(), behavior: 'smooth' });
+    };
+    const updateReviewSlider = () => {
+      if (!reviewSlider || !reviewViewport) return;
+      const atEnd = reviewViewport.scrollLeft + reviewViewport.clientWidth >= reviewViewport.scrollWidth - 4;
+      reviewIndex = Math.min(reviewPositions - 1, Math.max(0, Math.round(reviewViewport.scrollLeft / reviewStep())));
+      updateReviewDots();
+      reviewSlider.classList.toggle('can-scroll-back', reviewViewport.scrollLeft > 4);
+      reviewSlider.classList.toggle('is-at-end', atEnd);
+    };
+    const stopReviewAutoplay = () => window.clearInterval(reviewTimer);
+    const startReviewAutoplay = () => {
+      stopReviewAutoplay();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || reviewPositions <= 1) return;
+      reviewTimer = window.setInterval(() => {
+        const nextIndex = reviewIndex >= reviewPositions - 1 ? 0 : reviewIndex + 1;
+        goToReview(nextIndex);
+      }, reviewAutoplayDelay);
+    };
+    const resumeReviewAutoplay = () => {
+      window.clearTimeout(reviewResumeTimer);
+      reviewResumeTimer = window.setTimeout(startReviewAutoplay, 600);
+    };
+    reviewViewport?.addEventListener('scroll', () => {
+      updateReviewSlider();
+      stopReviewAutoplay();
+      resumeReviewAutoplay();
+    }, { passive: true });
+    reviewViewport?.addEventListener('wheel', () => { stopReviewAutoplay(); resumeReviewAutoplay(); }, { passive: true });
+    reviewViewport?.addEventListener('pointerdown', stopReviewAutoplay);
+    reviewViewport?.addEventListener('pointerup', resumeReviewAutoplay);
+    reviewViewport?.addEventListener('pointercancel', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('pointerenter', stopReviewAutoplay);
+    reviewSlider?.addEventListener('pointerleave', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('focusin', stopReviewAutoplay);
+    reviewSlider?.addEventListener('focusout', resumeReviewAutoplay);
+    reviewSlider?.addEventListener('touchstart', stopReviewAutoplay, { passive: true });
+    reviewSlider?.addEventListener('touchend', resumeReviewAutoplay, { passive: true });
+    reviewSlider?.addEventListener('touchcancel', resumeReviewAutoplay, { passive: true });
+    document.addEventListener('visibilitychange', () => document.hidden ? stopReviewAutoplay() : resumeReviewAutoplay());
+    window.addEventListener('resize', () => { renderReviewDots(); updateReviewSlider(); startReviewAutoplay(); });
+    renderReviewDots();
+    updateReviewSlider();
+    startReviewAutoplay();
+
+    const revealGroups = [
+      '.trust-item',
+      '.services-grid > *',
+      '.reviews > .shell > h2, .reviews > .shell > .section-lead',
+      '.review-card',
+      '.about-grid > *',
+      '.area-grid > *',
+      '.contact-grid > *',
+      '.footer-grid > *, .legal',
+    ];
+    const revealItems = revealGroups.flatMap((selector) => [...document.querySelectorAll<HTMLElement>(selector)]);
+    document.documentElement.classList.add('reveal-ready');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    } else {
+      revealGroups.forEach((selector) => {
+        document.querySelectorAll<HTMLElement>(selector).forEach((item, index) => {
+          item.classList.add('reveal');
+          item.style.setProperty('--reveal-delay', `${Math.min(index * 70, 280)}ms`);
+        });
+      });
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
   </script>
 </BaseLayout>
