@@ -117,6 +117,7 @@ pricing: {
       contact: 'Contact',
       lines: ['Meubelmontage en kleine klussen', 'Voor particulieren en bedrijven', 'In Tienen, Leuven & omgeving'],
       tagline: 'Persoonlijk · praktisch · transparant',
+      credit: 'Ontworpen & ontwikkeld door',
     },
   },
   fr: {
@@ -237,6 +238,7 @@ pricing: {
       contact: 'Contact',
       lines: ['Montage de meubles et petits travaux', 'Pour particuliers et entreprises', 'À Tirlemont, Louvain et aux environs'],
       tagline: 'Personnel · pratique · transparent',
+      credit: 'Conçu et développé par',
     },
   },
 };

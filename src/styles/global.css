@@ -754,6 +754,19 @@ blockquote {
   color: #8b9387;
   font-size: 0.74rem;
 }
+.site-credit a {
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(51, 63, 46, 0.35);
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 180ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-credit a:hover {
+    text-decoration-color: currentColor;
+  }
+}
 /* ========================================
    10. Responsive layout
    ======================================== */
@@ -1997,8 +2010,11 @@ blockquote {
     text-align: center;
   }
   .footer-grid > img {
-    width: min(100%, 280px);
+    width: 166px;
+    height: 76px;
     margin-inline: auto;
+    object-fit: cover;
+    object-position: left center;
   }
   .footer-grid nav {
     justify-items: center;
