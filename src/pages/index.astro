@@ -3,11 +3,11 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import heroArtwork from '../assets/hero.svg?url';
-import serviceMeubelmontage from '../assets/service-meubelmontage.png';
-import serviceHerstellingen from '../assets/service-herstellingen.png';
-import serviceDoeHetZelf from '../assets/service-doe-het-zelf.png';
-import servicePrijzen from '../assets/service-prijzen.png';
-import thomas from '../assets/thomas.png';
+import serviceMeubelmontage from '../assets/service-meubelmontage.webp';
+import serviceHerstellingen from '../assets/service-herstellingen.webp';
+import serviceDoeHetZelf from '../assets/service-doe-het-zelf.webp';
+import servicePrijzen from '../assets/service-prijzen.webp';
+import thomas from '../assets/thomas.webp';
 import { reviews } from '../data/reviews.js';
 
 const title = 'Meubelmontage en klusjesman in Bierbeek | Thomas';
@@ -27,7 +27,7 @@ const services = [
 const hasReviewOverflow = reviews.length > 3;
 const structuredData = {
   '@context':'https://schema.org','@type':'HomeAndConstructionBusiness',name:'Thomas Montage & Klussen',
-  url:Astro.site?.href ?? 'https://thomas-montage.be',image:new URL('/assets/og-image.png', Astro.site ?? Astro.url).href,description,
+  url:Astro.site?.href ?? 'https://thomas-montage.be',image:new URL('/assets/og-image.webp', Astro.site ?? Astro.url).href,description,
   address:{'@type':'PostalAddress',streetAddress:'Merbeekstraat 1',postalCode:'3360',addressLocality:'Bierbeek',addressCountry:'BE'},
   areaServed:['Bierbeek','Leuven','Vlaams-Brabant'],
 };
@@ -42,7 +42,7 @@ const structuredData = {
         <p>Praktische hulp voor particulieren en bedrijven. Zorgvuldig uitgevoerd, duidelijk afgesproken en correct afgewerkt.</p>
         <div class="actions"><a class="button" href="#contact"><span>Neem contact op</span></a><a class="button button--outline" href="#diensten"><span>Bekijk diensten</span></a></div>
       </div><div class="hero-art" aria-label="Voorbeelden van meubels die Thomas monteert">
-        <img class="hero-artwork" src={heroArtwork} alt="Een stoel, nachtkastje en bijzettafel" />
+        <img class="hero-artwork" src={heroArtwork} alt="Een stoel, nachtkastje en bijzettafel" fetchpriority="high" decoding="async" />
       </div></div>
     </div></section>
 
@@ -53,7 +53,7 @@ const structuredData = {
     <section class="section services" id="diensten"><div class="shell services-grid">
       <div class="section-intro"><h2>Vakwerk,<br />zonder gedoe.</h2><p>Praktische hulp voor kleine en grotere klussen, thuis of op het werk. Zorgvuldig uitgevoerd en duidelijk afgesproken.</p><a class="button" href="#contact"><span>Neem contact op</span></a></div>
       <div class="service-list"><p class="service-tagline"></p>
-        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><button class="service-trigger" type="button" aria-label={service.title} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden="true"><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} /></span></span></span></button></article>)}
+        {services.map((service,index) => <article class:list={['service', { 'is-open': index === 0 }]} data-service><button class="service-trigger" type="button" aria-label={service.title} aria-expanded={index === 0} aria-controls={"service-panel-" + index}><span class="service-compact" aria-hidden="true"><span class="number">{service.n}</span><span>{service.title}</span><span class="plus"><img src="/assets/plus.svg" alt="" /></span></span><span class="service-expanded" id={"service-panel-" + index} aria-hidden="true"><span class="service-expanded-clip"><span class="service-expanded-layout"><span class="number">{service.n}</span><span class="service-expanded-copy"><strong>{service.title}</strong><span>{service.text}</span></span><Image src={service.image} alt={service.alt} width={203} loading="lazy" decoding="async" /></span></span></span></button></article>)}
       </div>
     </div></section>
 
@@ -68,7 +68,7 @@ const structuredData = {
     </div></section>
 
     <section class="section about" id="over-thomas"><div class="shell about-grid">
-      <div class="portrait"><Image src={thomas} alt="Thomas, meubelmonteur en klusjesman" widths={[480,700]} sizes="(max-width: 760px) 78vw, 420px" /></div>
+      <div class="portrait"><Image src={thomas} alt="Thomas, meubelmonteur en klusjesman" widths={[480,700]} sizes="(max-width: 760px) 78vw, 420px" loading="lazy" decoding="async" /></div>
       <div><h2>Een rustige doener met oog voor detail.</h2><p>Ik ben Thomas, een praktische doener die graag met zijn handen werkt. Ik haal er voldoening uit om problemen op te lossen en iets netjes afgewerkt achter te laten. Mensen omschrijven mij als rustig, betrouwbaar en nauwkeurig. Persoonlijk contact vind ik belangrijk: eenvoudig overleggen, eerlijk afspreken en goed werk afleveren.</p></div>
     </div></section>
 

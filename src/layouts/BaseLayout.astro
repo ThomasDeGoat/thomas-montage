@@ -3,7 +3,7 @@ import '@phosphor-icons/web/duotone';
 import '../styles/global.css';
 
 interface Props { title: string; description: string; image?: string; }
-const { title, description, image = '/assets/og-image.png' } = Astro.props;
+const { title, description, image = '/assets/og-image.webp' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const socialImage = new URL(image, Astro.site ?? Astro.url);
 ---
