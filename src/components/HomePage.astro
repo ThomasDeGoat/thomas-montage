@@ -321,7 +321,7 @@ const structuredData = {
       '.about-grid > *',
       '.area-grid > *',
       '.contact-grid > *',
-      '.footer-grid > *, .legal',
+      '.footer-grid > *',
     ];
     const revealItems = revealGroups.flatMap((selector) => [...document.querySelectorAll<HTMLElement>(selector)]);
     document.documentElement.classList.add('reveal-ready');
