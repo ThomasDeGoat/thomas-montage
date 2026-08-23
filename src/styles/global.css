@@ -2097,6 +2097,46 @@ blockquote {
   }
 }
 
+/* Inline hero furniture: Safari-safe stagger and floating */
+.hero-furniture,
+.hero-furniture-entry,
+.hero-floor-shadow {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hero-furniture-entry {
+  will-change: opacity, transform;
+}
+.hero-furniture-entry--cabinet { animation: hero-furniture-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both; }
+.hero-furniture-entry--chair { animation: hero-furniture-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both; }
+.hero-furniture-entry--table { animation: hero-furniture-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) 480ms both; }
+.hero-shadow-entry--cabinet { animation: hero-shadow-enter 620ms ease-out 190ms both; }
+.hero-shadow-entry--chair { animation: hero-shadow-enter 620ms ease-out 370ms both; }
+.hero-shadow-entry--table { animation: hero-shadow-enter 620ms ease-out 550ms both; }
+.hero-furniture--chair { animation: hero-float-chair 9.4s cubic-bezier(0.45, 0, 0.55, 1) -2.7s infinite; }
+.hero-furniture--cabinet { animation: hero-float-cabinet 11.2s cubic-bezier(0.42, 0, 0.58, 1) -6.1s infinite; }
+.hero-furniture--table { animation: hero-float-table 10.3s cubic-bezier(0.46, 0, 0.54, 1) -4.3s infinite; }
+.hero-floor-shadow--chair { animation: hero-shadow-chair 9.4s cubic-bezier(0.45, 0, 0.55, 1) -2.7s infinite; }
+.hero-floor-shadow--cabinet { animation: hero-shadow-cabinet 11.2s cubic-bezier(0.42, 0, 0.58, 1) -6.1s infinite; }
+.hero-floor-shadow--table { animation: hero-shadow-table 10.3s cubic-bezier(0.46, 0, 0.54, 1) -4.3s infinite; }
+@keyframes hero-furniture-enter {
+  from { opacity: 0; transform: translateY(28px) scale(0.93); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes hero-shadow-enter { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hero-float-chair { 0%, 100% { transform: translateY(0); } 46% { transform: translateY(-5px); } 72% { transform: translateY(-3.5px); } }
+@keyframes hero-float-cabinet { 0%, 100% { transform: translateY(-1px); } 55% { transform: translateY(-7px); } }
+@keyframes hero-float-table { 0%, 100% { transform: translateY(0); } 38% { transform: translateY(-4px); } 68% { transform: translateY(-2px); } }
+@keyframes hero-shadow-chair { 0%, 100% { opacity: 0.18; transform: scaleX(0.92); } 46% { opacity: 0.085; transform: scaleX(1.04); } 72% { opacity: 0.115; transform: scaleX(1); } }
+@keyframes hero-shadow-cabinet { 0%, 100% { opacity: 0.165; transform: scaleX(0.94); } 55% { opacity: 0.06; transform: scaleX(1.08); } }
+@keyframes hero-shadow-table { 0%, 100% { opacity: 0.15; transform: scaleX(0.94); } 38% { opacity: 0.085; transform: scaleX(1.03); } 68% { opacity: 0.115; transform: scaleX(0.99); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-furniture-entry,
+  .hero-shadow-entry,
+  .hero-furniture,
+  .hero-floor-shadow { animation: none; }
+}
+
 /* ========================================
    Hero load-in animation
    ======================================== */

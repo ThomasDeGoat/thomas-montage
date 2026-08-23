@@ -2,7 +2,9 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import heroArtwork from '../assets/hero.svg?url';
+import heroChair from '../assets/hero-chair-shadowless.webp?url';
+import heroNightstand from '../assets/hero-nightstand-shadowless.webp?url';
+import heroTable from '../assets/hero-table-shadowless.webp?url';
 import serviceMeubelmontage from '../assets/service-meubelmontage.webp';
 import serviceHerstellingen from '../assets/service-herstellingen.webp';
 import serviceDoeHetZelf from '../assets/service-doe-het-zelf.webp';
@@ -41,8 +43,20 @@ const structuredData = {
         <h1><span>De klus gedaan.</span><span>Zonder gedoe.</span></h1>
         <p>Praktische hulp voor particulieren en bedrijven. Zorgvuldig uitgevoerd, duidelijk afgesproken en correct afgewerkt.</p>
         <div class="actions"><a class="button" href="#contact"><span>Neem contact op</span></a><a class="button button--outline" href="#diensten"><span>Bekijk diensten</span></a></div>
-      </div><div class="hero-art" aria-label="Voorbeelden van meubels die Thomas monteert">
-        <img class="hero-artwork" src={heroArtwork} alt="Een stoel, nachtkastje en bijzettafel" fetchpriority="high" decoding="async" />
+      </div><div class="hero-art">
+        <svg class="hero-artwork" viewBox="0 0 625 801" role="img" aria-labelledby="hero-art-title">
+          <title id="hero-art-title">Een stoel, nachtkastje en bijzettafel</title>
+          <rect x="321.307" y="408.211" width="221.039" height="331.559" rx="15.3766" fill="#DADADA" />
+          <rect x="66.6309" y="269.821" width="221.039" height="351.741" rx="15.3766" fill="#A67B50" />
+          <rect x="321.307" y="110.288" width="221.039" height="270.052" rx="15.3766" fill="#516848" />
+          <g class="hero-shadow-entry hero-shadow-entry--chair"><g transform="rotate(-8 181 616)"><ellipse class="hero-floor-shadow hero-floor-shadow--chair" cx="181" cy="616" rx="70" ry="10" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-shadow-entry hero-shadow-entry--cabinet"><g transform="rotate(-7 421 389)"><ellipse class="hero-floor-shadow hero-floor-shadow--cabinet" cx="421" cy="389" rx="67" ry="9" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-shadow-entry hero-shadow-entry--table"><g transform="rotate(-5 431 739)"><ellipse class="hero-floor-shadow hero-floor-shadow--table" cx="431" cy="739" rx="82" ry="11" fill="#333F2E" filter="url(#hero-shadow-blur)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--chair"><g class="hero-furniture hero-furniture--chair"><image href={heroChair} width="278.122" height="417.182" transform="matrix(-0.981353 -0.192216 -0.192216 0.981353 353.125 269.185)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--cabinet"><g class="hero-furniture hero-furniture--cabinet"><image href={heroNightstand} x="263.076" y="42.9121" width="282.501" height="423.751" transform="rotate(-8.73703 263.076 42.9121)" /></g></g>
+          <g class="hero-furniture-entry hero-furniture-entry--table"><g class="hero-furniture hero-furniture--table"><image href={heroTable} x="219.931" y="425.375" width="378.101" height="403.329" transform="rotate(-6.91108 219.931 425.375)" /></g></g>
+          <defs><filter id="hero-shadow-blur" x="-30%" y="-250%" width="160%" height="600%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7" /></filter></defs>
+        </svg>
       </div></div>
     </div></section>
 
