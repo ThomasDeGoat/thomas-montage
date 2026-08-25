@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = 'Pagina niet gevonden | Thomas Montage & Klussen';
+const description = 'Deze pagina bestaat niet. Bekijk de diensten van Thomas of neem contact op voor meubelmontage en kleine klussen.';
+---
+<BaseLayout {title} {description} robots="noindex, follow">
+  <main class="not-found" id="inhoud">
+    <p class="code">404</p>
+    <h1>Deze pagina bestaat niet.</h1>
+    <p>De link is mogelijk verouderd of het adres werd verkeerd ingevoerd.</p>
+    <nav aria-label="Nuttige links">
+      <a href="/">Terug naar de startpagina</a>
+      <a href="/#diensten">Bekijk de diensten</a>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    justify-items: start;
+    gap: 1rem;
+    width: min(100% - 2rem, 56rem);
+    margin-inline: auto;
+    color: #333f2e;
+  }
+
+  .code,
+  h1,
+  p {
+    margin: 0;
+  }
+
+  .code {
+    color: #a67b50;
+    font-weight: 800;
+  }
+
+  h1 {
+    font-family: 'Epilogue', sans-serif;
+    font-size: clamp(2.4rem, 8vw, 5rem);
+    max-width: 12ch;
+  }
+
+  nav { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1rem; }
+  a { color: inherit; font-weight: 700; text-underline-offset: .2em; }
+</style>
