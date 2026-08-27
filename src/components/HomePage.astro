@@ -57,7 +57,6 @@ const structuredData = {
       founder: { '@type': 'Person', name: 'Thomas', knowsLanguage: ['nl', 'fr'] },
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Rue Longue 190',
         postalCode: '1320',
         addressLocality: 'Beauvechain',
         addressRegion: 'Brabant wallon',
@@ -184,7 +183,7 @@ const structuredData = {
           <p class="form-honeypot" aria-hidden="true"><label>{copy.contact.honeypot}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
           <label>{copy.contact.name}<input required name="name" autocomplete="name" /></label><label>{copy.contact.email}<input required type="email" name="email" autocomplete="email" /></label><label>{copy.contact.message}<textarea required name="message" rows="3"></textarea></label><button class="button button--light" type="submit"><span>{copy.contact.submit}</span></button><p class="form-status" data-form-status role="status" aria-live="polite"></p>
         </form>
-      </div><div class="direct-contact"><p>{copy.contact.direct}</p><address><a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a>{email && <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{email}</a>}<span><img src="/assets/location.svg" alt="" />Rue Longue 190, 1320 Beauvechain</span></address>{(whatsappUrl || facebookUrl) && <><p class="social-label">{socialLabel}</p><div class="socials">{whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.whatsappLabel}><img src="/assets/whatsapp.svg" alt="" /></a>}{facebookUrl && <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.facebookLabel}><img src="/assets/facebook.svg" alt="" /></a>}</div></>}</div>
+      </div><div class="direct-contact"><p>{copy.contact.direct}</p><address><a href={`tel:${phone}`}><img src="/assets/phone.svg" alt="" />{phoneDisplay}</a>{email && <a href={`mailto:${email}`}><img src="/assets/email.svg" alt="" />{email}</a>}<span><img src="/assets/location.svg" alt="" />1320 Beauvechain</span></address>{(whatsappUrl || facebookUrl) && <><p class="social-label">{socialLabel}</p><div class="socials">{whatsappUrl && <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.whatsappLabel}><img src="/assets/whatsapp.svg" alt="" /></a>}{facebookUrl && <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label={copy.contact.facebookLabel}><img src="/assets/facebook.svg" alt="" /></a>}</div></>}</div>
     </div></section>
   </main>
   <footer class="footer"><div class="shell"><div class="footer-grid"><img src="/assets/footer-brand.svg" width="440" height="120" alt="Thomas Montage & Klussen" /><nav aria-label={copy.footer.navLabel}><a href="#diensten">{copy.footer.services}</a><a href="#tarieven">{copy.footer.pricing}</a><a href="#over-thomas">{copy.footer.about}</a><a href="#werkgebied">{copy.footer.area}</a><a href="#contact">{copy.footer.contact}</a></nav><p>{copy.footer.lines[0]}<br />{copy.footer.lines[1]}<br />{copy.footer.lines[2]}</p></div><div class="legal"><span>© 2026 Thomas Montage & Klussen</span><span class="site-credit">{copy.footer.credit} <a href="https://arthur-webdesign.be" target="_blank" rel="noopener">Arthur De Klerck</a></span><span>{copy.footer.tagline}</span></div></div></footer>

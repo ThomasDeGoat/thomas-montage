@@ -745,6 +745,12 @@ blockquote {
   color: var(--muted);
   line-height: 1.8;
 }
+@media (min-width: 901px) {
+  .footer-grid > p {
+    justify-self: end;
+    text-align: right;
+  }
+}
 .legal {
   border-top: 1px solid var(--line);
   margin-top: 38px;
